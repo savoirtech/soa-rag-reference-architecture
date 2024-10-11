@@ -29,11 +29,13 @@ Examples: Apache ActiveMQ, Apache Kafka
 
 ## ETL
 
-Extract, Transform, Load is an old design paradigm.
+Extract, Transform, Load is a design paradigm.
 
 Incoming data is first extracted, then transformed into something we can
 process, the data may be enriched, then sent (loaded) for further
-processing or storage.
+processing or storage. In modern implementations business rules for
+cleaning/filtering data may be augmented with Machine Learning to
+improve data quality & apply metadata for improved reuse.
 
 Examples: Apache Camel, Apache Flink
 
