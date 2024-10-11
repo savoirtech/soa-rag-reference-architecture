@@ -44,15 +44,12 @@
 
     <modules>
         <!-- ETL -->
+        <module>ETL</module>
 
-        <!-- API -->
-
-        <!-- Service Impl -->
-
-        <!-- WAR -->
-
-        <!-- LangChain4J Service -->
-
+        <!-- Agent System -->
+        <module>AppApi</module>
+        <module>AppImpl</module>
+        <module>AppWar</module>
     </modules>
 
     <pluginRepositories>
