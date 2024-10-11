@@ -12,13 +12,36 @@ To achieve this an architect may design a data pipeline that contains several st
 
 === Data Source
 
+Data sources from our point of view are anything that produces data that our system consumes.
+
 === Data Landing Zone
+
+When data is created and transmitted to our system, the collection of endpoints, brokers, and other services which collect primary data live here.
+
+Examples:
+Apache ActiveMQ, Apache Kafka
 
 === ETL
 
+Extract, Transform, Load is an old design paradigm.
+
+Incoming data is first extracted, then transformed into something we can process, the data may be enriched, then sent (loaded) for further processing or storage.
+
+Examples:
+Apache Camel, Apache Flink
+
 === Vector Database
 
+In generative AI settings a Vector Database acts as the memory for running agents.
+
+Embeddings are efficiently indexed in a way to increase performance, accuracy, and relevance of data & query processed by the LLM.
+
+Examples:
+Chroma, Pinecone
+
 === Agent System
+
+The Agent System is where our interaction with our application, the Vector Datastore & the LLM occur.
 
 == The Result
 
