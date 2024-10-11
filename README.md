@@ -19,6 +19,9 @@ several stages.
 Data sources from our point of view are anything that produces data that
 our system consumes.
 
+In our demo architecture we use JavaFaker to produce inputs to our
+pipeline.
+
 ## Data Landing Zone
 
 When data is created and transmitted to our system, the collection of
@@ -26,6 +29,8 @@ endpoints, brokers, and other services which collect primary data live
 here.
 
 Examples: Apache ActiveMQ, Apache Kafka
+
+In our demo architecture we use Apache ActiveMQ as a JMS data sink.
 
 ## ETL
 
@@ -39,6 +44,9 @@ improve data quality & apply metadata for improved reuse.
 
 Examples: Apache Camel, Apache Flink
 
+In our demo architecture we use Apache Camel to implement an ETL
+pattern.
+
 ## Vector Database
 
 In generative AI settings a Vector Database acts as the memory for
@@ -49,10 +57,15 @@ accuracy, and relevance of data & query processed by the LLM.
 
 Examples: Chroma, Pinecone
 
+In our demo architecture we use Chroma.
+
 ## Agent System
 
 The Agent System is where our interaction with our application, the
 Vector Datastore & the LLM occur.
+
+We use Apache Karaf with a Backend-For-Frontend design to provide a web
+interface, and integration to LocalAI via LangChain4j.
 
 # The Result
 
