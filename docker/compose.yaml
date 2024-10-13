@@ -1,0 +1,41 @@
+name: 'soa-ai'
+
+services:
+
+  message-broker:
+    image: symptoma/activemq:5.18.4
+    container_name: soa-ai-activemq
+    env_file:
+      - .env
+    ports:
+      - '127.0.0.1:${MESSAGE_BROKER_OPEN_WIRE_PORT:?error}:61616'
+      - '127.0.0.1:${MESSAGE_BROKER_WEB_CONSOLE_PORT:?error}:8161'
+
+
+  chromadb:
+    image: chromadb/chroma:0.5.11
+    volumes:
+      - ./chromadb:/chroma/chroma
+    environment:
+      - IS_PERSISTENT=TRUE
+      - PERSIST_DIRECTORY=/chroma/chroma # this is the default path, change it as needed
+      - ANONYMIZED_TELEMETRY=${ANONYMIZED_TELEMETRY:-TRUE}
+    ports:
+      - 8000:8000
+
+  local-ai:
+    image: localai/localai:latest-aio-cpu
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/readyz" ]
+      interval: 1m
+      timeout: 20m
+      retries: 20
+    ports:
+      - 8080:8080
+    env_file:
+      - .env
+    environment:
+      - MODELS_PATH=/models
+      - 'PRELOAD_MODELS=[{"url": "github:go-skynet/model-gallery/gpt4all-j.yaml", "name": "gpt-4"}]'
+    volumes:
+      - ./models:/models:cached

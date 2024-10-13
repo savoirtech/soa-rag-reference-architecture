@@ -44,3 +44,6 @@ atlassian-ide-plugin.xml
 .DS_Store
 
 article.xml
+
+docker/chromadb/*
+docker/models/*

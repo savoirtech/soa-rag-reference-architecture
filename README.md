@@ -74,6 +74,32 @@ embedded store for the LLM.
 
 # Demo
 
+Build our demo project:
+
+``` bash
+mvn clean install
+```
+
+Start supporting services:
+
+``` bash
+cd docker
+docker compose up
+```
+
+Start Apache Karaf:
+
+``` bash
+cd KARAF_HOME
+./bin/karaf
+```
+
+Install ETL and Agent components:
+
+``` bash
+install -s mvn:com.savoir
+```
+
 # Conclusion
 
 # About the Authors

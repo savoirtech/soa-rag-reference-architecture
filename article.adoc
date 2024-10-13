@@ -60,6 +60,33 @@ Once this pipeline is created, an agent may use the pre-populated embedded store
 
 == Demo
 
+Build our demo project:
+[,bash,num]
+----
+mvn clean install
+----
+
+Start supporting services:
+[,bash,run]
+----
+cd docker
+docker compose up
+----
+
+Start Apache Karaf:
+[,bash,num]
+----
+cd KARAF_HOME
+./bin/karaf
+----
+
+Install ETL and Agent components:
+[,bash,num]
+----
+install -s mvn:com.savoir
+----
+
+
 == Conclusion
 
 == About the Authors
