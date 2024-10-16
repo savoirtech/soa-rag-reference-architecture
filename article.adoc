@@ -73,7 +73,9 @@ cd docker
 docker compose up
 ----
 
-Start Apache Karaf:
+You may want to grab a cup of coffee while docker handles downloads, and service initializations.
+
+Start 2 Apache Karaf instances:
 [,bash,num]
 ----
 cd KARAF_HOME
@@ -83,9 +85,65 @@ cd KARAF_HOME
 Install ETL and Agent components:
 [,bash,num]
 ----
-install -s mvn:com.savoir
+feature:repo-add mvn:org.apache.cxf.karaf/apache-cxf/3.5.5/xml/features
+feature:install http
+feature:install aries-blueprint
+feature:install cxf-core
+feature:install cxf-jaxrs
+install -s mvn:commons-io/commons-io/2.15.1
+install -s wrap:mvn:org.apache.commons/commons-compress/1.27.1
+install -s wrap:mvn:com.google.code.gson/gson/2.11.0
+install -s wrap:mvn:com.knuddels/jtokkit/1.1.0
+install -s mvn:com.fasterxml.jackson.core/jackson-core/2.15.0
+install -s mvn:com.fasterxml.jackson.core/jackson-annotations/2.15.0
+install -s mvn:com.fasterxml.jackson.core/jackson-databind/2.15.0
+
+install -s mvn:com.savoir.soa.rag.ref.arch/AppApi
+install -s mvn:com.savoir.soa.rag.ref.arch/AppAgent
+install -s mvn:com.savoir.soa.rag.ref.arch/AppImpl
+
+#############
+
+feature:repo-add mvn:org.apache.camel.karaf/apache-camel/3.6.0/xml/features
+feature:repo-add mvn:org.apache.activemq/activemq-karaf/5.17.1/xml/features
+feature:install camel-blueprint
+feature:install activemq-camel
+install -s mvn:commons-io/commons-io/2.15.1
+install -s wrap:mvn:org.apache.commons/commons-compress/1.27.1
+install -s wrap:mvn:com.google.code.gson/gson/2.11.0
+install -s wrap:mvn:com.knuddels/jtokkit/1.1.0
+install -s mvn:com.fasterxml.jackson.core/jackson-core/2.15.0
+install -s mvn:com.fasterxml.jackson.core/jackson-annotations/2.15.0
+install -s mvn:com.fasterxml.jackson.core/jackson-databind/2.15.0
+install -s mvn:com.savoir.soa.rag.ref.arch/ETL
 ----
 
+Message body sent to orders queue.
+[,json,num]
+----
+{
+  "order": {
+    "customer": {
+      "lastName": "Hessla",
+      "firstName": "Heaf",
+      "address": "1234 Main St",
+      "city": "Jackson Hole",
+      "state": "WY",
+      "zip": "83001"
+    },
+    "items": [
+      {
+        "product": "abc widget",
+        "quantity": 2
+      },
+      {
+        "product": "xyz widget",
+        "quantity": 1
+      }
+    ]
+  }
+}
+----
 
 == Conclusion
 
@@ -102,4 +160,3 @@ Please do not hesitate to reach out with questions and comments, here on the Blo
 Thank you to the JavaFaker, Apache ActiveMQ, Apache Camel, Apache Karaf, Apache CXF, LangChain4j, and LocalAI communities.
 
 (c) 2024 Savoir Technologies
-

@@ -3,7 +3,7 @@
 In this post we’re going to explore a SOA RAG reference architecture.
 
 <figure>
-<img src="./assets/images/ReferenceArch.png" alt="ReferenceArch" />
+<img src="assets/images/ReferenceArch.png" alt="ReferenceArch" />
 </figure>
 
 # High Level
@@ -86,6 +86,9 @@ Start supporting services:
 cd docker
 docker compose up
 ```
+
+You may want to grab a cup of coffee while docker handles downloads, and
+service initializations.
 
 Start Apache Karaf:
 

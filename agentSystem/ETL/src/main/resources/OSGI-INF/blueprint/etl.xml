@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright (c) 2012-2024 Savoir Technologies, Inc.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:camel="http://camel.apache.org/schema/blueprint"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+           xsi:schemaLocation="
+       http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+       http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0
+       http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
+       ">
+
+    <!-- ActiveMQ component -->
+
+    <bean id="amqConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="tcp://localhost:61616"/>
+        <property name="userName" value="admin" />
+        <property name="password" value="admin" />
+    </bean>
+
+    <bean id="amqPooledConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory">
+        <property name="maxConnections" value="5"/>
+        <property name="maximumActiveSessionPerConnection" value="5"/>
+        <property name="connectionFactory" ref="amqConnectionFactory"/>
+    </bean>
+
+    <bean id="consumerJmsConfig" class="org.apache.camel.component.jms.JmsConfiguration">
+        <property name="connectionFactory" ref="amqConnectionFactory"/>
+        <property name="concurrentConsumers" value="5"/>
+    </bean>
+
+    <!-- Set up the consumer -->
+    <bean id="jmsConsumer" class="org.apache.camel.component.jms.JmsComponent">
+        <property name="connectionFactory" ref="amqConnectionFactory"/>
+        <property name="configuration" ref="consumerJmsConfig"/>
+    </bean>
+
+    <!-- Configure Chroma here -->
+    <bean id="ChromaDataStore" class="com.savoir.soa.rag.ref.arch.etl.ChromaDataStore" scope="singleton">
+        <argument value="http://localhost:8000"/>
+        <argument value="soa-rag-ref-arch"/>
+    </bean>
+
+    <!-- Transform to TextSegment, and Add Metadata -->
+    <bean id="TransformProcessor" class="com.savoir.soa.rag.ref.arch.etl.TransformProcessor"/>
+
+    <!-- Configure Loader to point to Chroma DB -->
+    <bean id="LoadChromaProcessor" class="com.savoir.soa.rag.ref.arch.etl.LoadChromaProcessor">
+        <argument ref="ChromaDataStore"/>
+    </bean>
+
+    <!-- Camel configuration -->
+    <camelContext id="etl-camelContext" trace="false" xmlns="http://camel.apache.org/schema/blueprint" >
+
+        <!-- Accept the order -->
+        <route id="ETL">
+            <!-- Take message off broker queue, pass json body to camel pipeline -->
+            <from id="Extract" uri="jmsConsumer:queue:orders"/>
+            <!-- Transform and add Metadata to embedding document -->
+            <process id="Transform" ref="TransformProcessor"/>
+            <!-- Load into Chroma -->
+            <process id="Load" ref="LoadChromaProcessor"/>
+        </route>
+
+    </camelContext>
+
+</blueprint>
