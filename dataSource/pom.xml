@@ -25,10 +25,70 @@
 
     <groupId>com.savoir.soa.rag.ref.arch</groupId>
     <artifactId>dataSource</artifactId>
-    <packaging>pom</packaging>
     <version>1.0.0-SNAPSHOT</version>
 
     <name>SOA-RAG-Reference-Architecture-DataSource</name>
-    <description>Soa RAG Reference Architecture</description>
+    <description>DataFaker to create input to Data Staging</description>
+
+    <properties>
+        <datafaker.version>2.4.0</datafaker.version>
+        <activemq.version>5.17.1</activemq.version>
+        <slf4j.version>2.0.16</slf4j.version>
+    </properties>
+
+    <!--
+    This is just a script to mass message a broker.
+    It'll produce 10000 messages, and then exit.
+    -->
+
+    <dependencies>
+        <dependency>
+            <groupId>net.datafaker</groupId>
+            <artifactId>datafaker</artifactId>
+            <version>${datafaker.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-client</artifactId>
+            <version>${activemq.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-nop</artifactId>
+            <version>2.0.13</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.1</version>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
+
+            <!-- include all the dependencies into the jar so it's easier to execute the example -->
+            <plugin>
+                <groupId>org.fusesource.mvnplugins</groupId>
+                <artifactId>maven-uberize-plugin</artifactId>
+                <version>1.14</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>uberize</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
 
 </project>
