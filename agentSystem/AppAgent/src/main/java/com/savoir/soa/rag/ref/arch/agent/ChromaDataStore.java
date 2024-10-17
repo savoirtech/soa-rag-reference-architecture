@@ -76,4 +76,9 @@ public class ChromaDataStore implements AgentDataStore {
         System.out.println("Found relevant matches: " + relevant.size());
         return embeddingMatch.embedded().text();
     }
+
+    @Override
+    public String askQuestion(String question) {
+        return "";
+    }
 }

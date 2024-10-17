@@ -31,7 +31,7 @@
     <artifactId>AppImpl</artifactId>
     <packaging>bundle</packaging>
 
-    <name>ETL and Agent :: Service :: IMPL</name>
+    <name>ETL and Agent :: Agent :: Service Impl</name>
 
     <properties>
 

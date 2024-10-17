@@ -20,4 +20,6 @@ public interface AgentDataStore {
     public String search(String embeddingQuestion, String metadataKey, String metadataTarget);
 
     public String findRelevant(String embeddingQuestion);
+
+    public String askQuestion(String question);
 }

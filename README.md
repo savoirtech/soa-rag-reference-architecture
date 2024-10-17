@@ -3,7 +3,7 @@
 In this post we’re going to explore a SOA RAG reference architecture.
 
 <figure>
-<img src="assets/images/ReferenceArch.png" alt="ReferenceArch" />
+<img src="./assets/images/ReferenceArch.png" alt="ReferenceArch" />
 </figure>
 
 # High Level
@@ -80,6 +80,16 @@ Build our demo project:
 mvn clean install
 ```
 
+To setup ETL and Agent systems as Dockerized Karafs
+
+``` bash
+cd ETLDocker/target
+docker build -t etl .
+
+cd AgentDocker/target
+docker build -t agent .
+```
+
 Start supporting services:
 
 ``` bash
@@ -90,17 +100,38 @@ docker compose up
 You may want to grab a cup of coffee while docker handles downloads, and
 service initializations.
 
-Start Apache Karaf:
+Message body sent to orders queue.
 
-``` bash
-cd KARAF_HOME
-./bin/karaf
+``` json
+{
+  "order": {
+    "customer": {
+      "lastName": "Hessla",
+      "firstName": "Heaf",
+      "address": "1234 Main St",
+      "city": "Jackson Hole",
+      "state": "WY",
+      "zip": "83001"
+    },
+    "items": [
+      {
+        "product": "abc widget",
+        "quantity": 2
+      },
+      {
+        "product": "xyz widget",
+        "quantity": 1
+      }
+    ]
+  }
+}
 ```
 
-Install ETL and Agent components:
+Testing endpoints:
 
 ``` bash
-install -s mvn:com.savoir
+curl --location --request POST 'http://127.0.0.1:8181/cxf/ai/ask' \
+--header 'Content-Type: text/plain' --header 'Accept: text/plain' -d 'test'
 ```
 
 # Conclusion

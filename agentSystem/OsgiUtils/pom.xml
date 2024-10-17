@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>OsgiUtils</artifactId>
-    <name>ETL and Agent :: OSGi Utils</name>
+    <name>ETL and Agent :: LangChain4j OSGi Utils</name>
     <description>OSGi Utils to make LangChain4j work on Apache Karaf</description>
     <packaging>bundle</packaging>
 

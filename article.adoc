@@ -66,6 +66,16 @@ Build our demo project:
 mvn clean install
 ----
 
+To setup ETL and Agent systems as Dockerized Karafs
+[,bash,num]
+----
+cd ETLDocker/target
+docker build -t etl .
+
+cd AgentDocker/target
+docker build -t agent .
+----
+
 Start supporting services:
 [,bash,run]
 ----
@@ -74,49 +84,6 @@ docker compose up
 ----
 
 You may want to grab a cup of coffee while docker handles downloads, and service initializations.
-
-Start 2 Apache Karaf instances:
-[,bash,num]
-----
-cd KARAF_HOME
-./bin/karaf
-----
-
-Install ETL and Agent components:
-[,bash,num]
-----
-feature:repo-add mvn:org.apache.cxf.karaf/apache-cxf/3.5.5/xml/features
-feature:install http
-feature:install aries-blueprint
-feature:install cxf-core
-feature:install cxf-jaxrs
-install -s mvn:commons-io/commons-io/2.15.1
-install -s wrap:mvn:org.apache.commons/commons-compress/1.27.1
-install -s wrap:mvn:com.google.code.gson/gson/2.11.0
-install -s wrap:mvn:com.knuddels/jtokkit/1.1.0
-install -s mvn:com.fasterxml.jackson.core/jackson-core/2.15.0
-install -s mvn:com.fasterxml.jackson.core/jackson-annotations/2.15.0
-install -s mvn:com.fasterxml.jackson.core/jackson-databind/2.15.0
-
-install -s mvn:com.savoir.soa.rag.ref.arch/AppApi
-install -s mvn:com.savoir.soa.rag.ref.arch/AppAgent
-install -s mvn:com.savoir.soa.rag.ref.arch/AppImpl
-
-#############
-
-feature:repo-add mvn:org.apache.camel.karaf/apache-camel/3.6.0/xml/features
-feature:repo-add mvn:org.apache.activemq/activemq-karaf/5.17.1/xml/features
-feature:install camel-blueprint
-feature:install activemq-camel
-install -s mvn:commons-io/commons-io/2.15.1
-install -s wrap:mvn:org.apache.commons/commons-compress/1.27.1
-install -s wrap:mvn:com.google.code.gson/gson/2.11.0
-install -s wrap:mvn:com.knuddels/jtokkit/1.1.0
-install -s mvn:com.fasterxml.jackson.core/jackson-core/2.15.0
-install -s mvn:com.fasterxml.jackson.core/jackson-annotations/2.15.0
-install -s mvn:com.fasterxml.jackson.core/jackson-databind/2.15.0
-install -s mvn:com.savoir.soa.rag.ref.arch/ETL
-----
 
 Message body sent to orders queue.
 [,json,num]
@@ -143,6 +110,14 @@ Message body sent to orders queue.
     ]
   }
 }
+----
+
+
+Testing endpoints:
+[,bash,num]
+----
+curl --location --request POST 'http://127.0.0.1:8181/cxf/ai/ask' \
+--header 'Content-Type: text/plain' --header 'Accept: text/plain' -d 'test'
 ----
 
 == Conclusion

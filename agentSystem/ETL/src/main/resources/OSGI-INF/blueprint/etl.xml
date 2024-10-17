@@ -29,7 +29,7 @@
     <!-- ActiveMQ component -->
 
     <bean id="amqConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
-        <property name="brokerURL" value="tcp://localhost:61616"/>
+        <property name="brokerURL" value="tcp://message-broker:61616"/>
         <property name="userName" value="admin" />
         <property name="password" value="admin" />
     </bean>
@@ -53,7 +53,7 @@
 
     <!-- Configure Chroma here -->
     <bean id="ChromaDataStore" class="com.savoir.soa.rag.ref.arch.etl.ChromaDataStore" scope="singleton">
-        <argument value="http://localhost:8000"/>
+        <argument value="http://chromadb:8000"/> <!-- http://localhost:8000-->
         <argument value="soa-rag-ref-arch"/>
     </bean>
 

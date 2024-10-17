@@ -41,6 +41,7 @@
         <maven.bundle.plugin.version>5.1.6</maven.bundle.plugin.version>
         <javax.ws.rs-api.version>2.1</javax.ws.rs-api.version>
         <slf4j.version>1.7.32</slf4j.version>
+        <activemq.version>5.17.1</activemq.version>
         <karaf.version>4.4.6</karaf.version>
         <camel.version>3.6.0</camel.version>
         <cxf.version>3.5.5</cxf.version>
@@ -56,12 +57,16 @@
 
         <!-- ETL -->
         <module>ETL</module>
+        <module>ETLFeature</module>
+        <module>ETLDocker</module>
 
         <!-- Agent System -->
         <module>AppApi</module>
         <module>AppAgent</module>
         <module>AppImpl</module>
         <module>AppWar</module>
+        <module>AppFeature</module>
+        <module>AppDocker</module>
     </modules>
 
     <pluginRepositories>
