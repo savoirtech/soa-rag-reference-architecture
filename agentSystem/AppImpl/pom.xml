@@ -79,6 +79,13 @@
                             com.savoir.soa.rag.ref.arch.api*,
                             com.savoir.soa.rag.ref.arch.agent*,
                             !dev.langchain4j.store.embedding.chroma*,
+                            javax.servlet;version="[2.6,4)",
+                            javax.servlet.http;version="[2.6,4)",
+                            javax.ws.rs,
+                            javax.ws.rs.core,
+                            javax.xml.bind*;version=!,
+                            org.apache.cxf.jaxrs.provider,
+                            org.osgi.service.blueprint,
                             *
                         </Import-Package>
                     </instructions>

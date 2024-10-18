@@ -29,6 +29,7 @@
     </parent>
 
     <artifactId>AppWar</artifactId>
+    <packaging>war</packaging>
 
     <name>ETL and Agent :: Agent :: WAR</name>
 

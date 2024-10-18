@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.savoir.soa.rag.ref.arch.api;
+package com.savoir.soa.rag.ref.arch.agent;
 
-public interface AgentService {
+public interface CruiseAssistant {
 
-    String ask(String question);
+    String answer(String request);
 
-    String search(String query);
-
-    String findRelevant(String query);
 }

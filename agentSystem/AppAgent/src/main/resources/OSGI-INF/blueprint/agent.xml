@@ -24,7 +24,7 @@
 
 
     <bean id="chromaDS" class="com.savoir.soa.rag.ref.arch.agent.ChromaDataStore" scope="singleton">
-        <argument value="http://chromadb:8000"/>
+        <argument value="http://chromadb:8000"/> <!-- http://chromadb:8000 when on docker, http://localhost:8000 otherwise-->
         <argument value="soa-rag-ref-arch"/>
     </bean>
 

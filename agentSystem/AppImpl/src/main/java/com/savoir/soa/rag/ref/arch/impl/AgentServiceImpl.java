@@ -45,10 +45,19 @@ public class AgentServiceImpl implements AgentService {
     @Path("/ask")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public String ask(String query) {
+    public String ask(String question) {
+        LOGGER.info("Asked question: " + question);
+        return agentDataStore.askQuestion(question);
+    }
+
+    @Override
+    @POST
+    @Path("/search")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String search(String query) {
         LOGGER.info("User Query:: " + query);
-        String result = agentDataStore.search("Which customer is most common?", "tenant", "savoir");
-        return result;
+        return agentDataStore.search("Which customer is most common?", "tenant", "savoir");
     }
 
     @Override
@@ -58,8 +67,7 @@ public class AgentServiceImpl implements AgentService {
     @Produces(MediaType.TEXT_PLAIN)
     public String findRelevant(String query) {
         LOGGER.info("User Query:: " + query);
-        String result = agentDataStore.findRelevant("Whom has ordered abc widget?");
-        return result;
+        return agentDataStore.findRelevant("Whom has ordered abc widget?");
     }
 
     @GET
