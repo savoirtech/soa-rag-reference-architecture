@@ -133,6 +133,12 @@ Sample message body sent to reservations queue.
 }
 ----
 
+Web UI:
+[,bash,num]
+----
+http://localhost:8181/ai/
+----
+
 Testing endpoints:
 [,bash,num]
 ----
