@@ -16,6 +16,9 @@
 package com.savoir.soa.rag.ref.arch.etl;
 
 import dev.langchain4j.data.document.Metadata;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 
@@ -23,13 +26,28 @@ import dev.langchain4j.data.segment.TextSegment;
 
 public class TransformProcessor implements Processor {
 
+    private Random rnd = new Random();
+    private List<String> loyaltyLevels = List.of("bronze", "silver", "gold");
+
     @Override
     public void process(Exchange exchange) throws Exception {
         String body = exchange.getIn().getBody(String.class);
         //Use body and data sources to generate metadata for this embedding.
         Metadata metadata = new Metadata();
         metadata.put("tenant", "savoir");
+        metadata.put("chargeBacks", String.valueOf(chanceOf(2)));
+        metadata.put("altercations", String.valueOf(chanceOf(2)));
+        metadata.put("casinoUsed", String.valueOf(chanceOf(50)));
+        metadata.put("loyaltyLevel", randomLoyaltyLevel());
         TextSegment textSegment = TextSegment.from(body, metadata);
         exchange.getIn().setBody(textSegment);
+    }
+
+    private boolean chanceOf(int percentage) {
+        return rnd.nextInt(100) < percentage;
+    }
+
+    private String randomLoyaltyLevel() {
+        return loyaltyLevels.get(rnd.nextInt(loyaltyLevels.size()));
     }
 }

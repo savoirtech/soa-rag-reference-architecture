@@ -71,7 +71,7 @@
         <!-- Accept the order -->
         <route id="ETL">
             <!-- Take message off broker queue, pass json body to camel pipeline -->
-            <from id="Extract" uri="jmsConsumer:queue:orders"/>
+            <from id="Extract" uri="jmsConsumer:queue:reservations"/>
             <!-- Transform and add Metadata to embedding document -->
             <process id="Transform" ref="TransformProcessor"/>
             <!-- Load into Chroma -->
