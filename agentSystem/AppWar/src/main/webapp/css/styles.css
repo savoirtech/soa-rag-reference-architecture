@@ -229,12 +229,6 @@ button a {
     background-color: #C7EE63;
 }
 
-section#openLibertyAndMp {
-    background:#f4f4f5;
-    background-size: 100% calc(100% - 70px);
-    background-repeat: no-repeat;
-}
-
 #healthBox {
     text-align: left;
     display: table-cell;
