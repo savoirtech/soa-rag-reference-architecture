@@ -15,6 +15,7 @@
  */
 package com.savoir.soa.rag.ref.arch.data.faker;
 
+import java.util.List;
 import javax.jms.Connection;
 import javax.jms.DeliveryMode;
 import javax.jms.Destination;
@@ -25,11 +26,13 @@ import javax.jms.TextMessage;
 import net.datafaker.Faker;
 import net.datafaker.providers.base.Address;
 import net.datafaker.providers.base.Name;
+import net.datafaker.transformations.Field;
 import net.datafaker.transformations.JsonTransformer;
 import net.datafaker.transformations.Schema;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQQueue;
 
+import static net.datafaker.transformations.Field.compositeField;
 import static net.datafaker.transformations.Field.field;
 
 public class Publisher {
@@ -67,7 +70,26 @@ public class Publisher {
                     field("streetAddress", () ->  address.streetAddress()),
                     field("zipcode", () ->  address.zipCode()),
                     field("email", () ->  faker.internet().emailAddress()),
-                    field("cell", () ->  faker.phoneNumber().cellPhone())
+                    field("cell", () ->  faker.phoneNumber().cellPhone()),
+                    field("roomType", () ->  getRoomType(faker)),
+                    field("excursions", () ->
+                            List.of(compositeField(null,
+                                    new Field[]{
+                                            field("1", () -> getExecursion(faker)),
+                                            field("2", () -> getExecursion(faker)),
+                                            field("3", () -> getExecursion(faker))
+                                    })
+                            )
+                    ),
+                    field("mealOptions", () ->
+                            List.of(compositeField(null,
+                                    new Field[]{
+                                            field("1", () -> getMealOptions(faker)),
+                                            field("2", () -> getMealOptions(faker)),
+                                            field("3", () -> getMealOptions(faker))
+                                    })
+                            )
+                    )
             );
 
             JsonTransformer<Object> transformer = JsonTransformer.builder().build();
@@ -98,6 +120,18 @@ public class Publisher {
             return args[index];
         else
             return defaultValue;
+    }
+
+    private static String getRoomType(Faker faker) {
+        return faker.expression("#{options.option 'inside','window','balcony','suite'}");
+    }
+
+    private static String getExecursion(Faker faker) {
+        return faker.expression("#{options.option 'Beach','JetSki','Surf','ScubaDiving','SightSeeing'}");
+    }
+
+    private static String getMealOptions(Faker faker) {
+        return faker.expression("#{options.option 'SteakHouse','Sushi','Italian','IceCream','WineTasting'}");
     }
 
 }

@@ -85,33 +85,44 @@ docker compose up
 
 You may want to grab a cup of coffee while docker handles downloads, and service initializations.
 
-Message body sent to orders queue.
+When the Message Broker is running, you may populate the reservations queue using the provided dataSource script.
+
+Script build and run instructions:
+[,bash,num]
+----
+cd dataSource
+mvn clean install
+java -cp target/dataSource-1.0.0-SNAPSHOT.jar com.savoir.soa.rag.ref.arch.data.faker.Publisher
+----
+
+Sample message body sent to reservations queue.
 [,json,num]
 ----
 {
-  "order": {
-    "customer": {
-      "lastName": "Hessla",
-      "firstName": "Heaf",
-      "address": "1234 Main St",
-      "city": "Jackson Hole",
-      "state": "WY",
-      "zip": "83001"
-    },
-    "items": [
-      {
-        "product": "abc widget",
-        "quantity": 2
-      },
-      {
-        "product": "xyz widget",
-        "quantity": 1
-      }
-    ]
-  }
+  "firstName": "Claud",
+  "lastName": "Sporer",
+  "streetName": "Zemlak Tunnel",
+  "streetAddress": "9843 Botsford Inlet",
+  "zipcode": "18282",
+  "email": "some.email@fake.email",
+  "cell": "(555) 555-5555",
+  "roomType": "balcony",
+  "excursions": [
+    {
+      "1": "Beach",
+      "2": "JetSki",
+      "3": "Beach"
+    }
+  ],
+  "mealOptions": [
+    {
+      "1": "Italian",
+      "2": "Italian",
+      "3": "WineTasting"
+    }
+  ]
 }
 ----
-
 
 Testing endpoints:
 [,bash,num]

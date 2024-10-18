@@ -25,7 +25,7 @@ services:
     ports:
       - 8000:8000
 
-  karaf:
+  karaf-etl:
     image: etl
     depends_on:
       - message-broker
