@@ -53,6 +53,12 @@ services:
     stdin_open: true
     tty: true
 
+  agent-ui:
+    image: agent-ui:v1
+    depends_on:
+      - karaf-agent
+    ports:
+      - "80:80"
 
   local-ai:
     image: localai/localai:latest-aio-cpu

@@ -40,6 +40,7 @@
             <bundle start-level="85">mvn:com.savoir.soa.rag.ref.arch/AppAgent/${project.version}</bundle>
             <bundle start-level="85">mvn:com.savoir.soa.rag.ref.arch/AppImpl/${project.version}</bundle>
         </conditional>
+        <!--
         <feature>war</feature>
         <feature>webconsole</feature>
         <conditional>
@@ -49,11 +50,9 @@
             <condition>cxf-jaxrs</condition>
             <condition>war</condition>
             <condition>webconsole</condition>
-            <!--
             <bundle start-level="85">webbundle:mvn:com.savoir.soa.rag.ref.arch/AppWar/${project.version}/war?Web-ContextPath=ai</bundle>
-            -->
         </conditional>
-
+        -->
     </feature>
 
 </features>

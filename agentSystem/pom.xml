@@ -64,7 +64,6 @@
         <module>AppApi</module>
         <module>AppAgent</module>
         <module>AppImpl</module>
-        <module>AppWar</module>
         <module>AppFeature</module>
         <module>AppDocker</module>
     </modules>

@@ -80,14 +80,17 @@ Build our demo project:
 mvn clean install
 ```
 
-To setup ETL and Agent systems as Dockerized Karafs
+To setup ETL, Agent, and Agent-UI systems as Dockerized Containers:
 
 ``` bash
 cd ETLDocker/target
 docker build -t etl .
 
-cd AgentDocker/target
+cd AppDocker/target
 docker build -t agent .
+
+cd AppUIDocker
+docker build -t agent-ui:v1 .
 ```
 
 Start supporting services:
@@ -110,6 +113,17 @@ cd dataSource
 mvn clean install
 java -cp target/dataSource-1.0.0-SNAPSHOT.jar com.savoir.soa.rag.ref.arch.data.faker.Publisher
 ```
+
+Install feature: feature:repo-add
+mvn:com.savoir.soa.rag.ref.arch/AppFeature/1.0.0-SNAPSHOT/xml/features
+
+webbundle:mvn:com.savoir.soa.rag.ref.arch/AppWar/1.0.0-SNAPSHOT/war?Web-ContextPath=ai
+
+Stand alone web docker:
+<https://mav-rana.medium.com/containerize-a-simple-static-website-a381c5e49633>
+
+Test Chroma docker run -p 8000:8000 -d --rm --name chromadb
+chromadb/chroma:0.5.13
 
 Sample message body sent to reservations queue.
 
@@ -138,6 +152,12 @@ Sample message body sent to reservations queue.
     }
   ]
 }
+```
+
+Web UI:
+
+``` bash
+http://localhost:8181/ai/
 ```
 
 Testing endpoints:

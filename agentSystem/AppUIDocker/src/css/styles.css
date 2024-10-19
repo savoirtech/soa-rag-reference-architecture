@@ -24,7 +24,7 @@ section {
 }
 
 .headerImage {
-    background-image: url(/img/header_ufo.png);
+    background-image: url(/src/img/header_ufo.png);
     background-repeat: no-repeat;
     background-position: top 20px right 15px;
     height: 103px;
