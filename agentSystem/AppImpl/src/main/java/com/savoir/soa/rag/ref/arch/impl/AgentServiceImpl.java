@@ -26,10 +26,15 @@ import javax.ws.rs.Produces;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Path("/")
+@CrossOriginResourceSharing(
+        allowAllOrigins = true,
+        allowCredentials = true,
+        maxAge = 1209600 )
 public class AgentServiceImpl implements AgentService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AgentServiceImpl.class);

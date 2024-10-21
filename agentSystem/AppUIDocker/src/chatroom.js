@@ -35,7 +35,6 @@ uri = "http://localhost:8182/cxf/ai/ask";
 // Make a POST call
 const userAction = async (myMessage) => {
     const response = await fetch(uri, {
-        mode: 'no-cors',
         method: 'POST',
         body: myMessage, // string or object
         headers: {
