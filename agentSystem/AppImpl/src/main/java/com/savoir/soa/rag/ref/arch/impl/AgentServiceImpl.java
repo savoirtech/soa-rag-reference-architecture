@@ -26,14 +26,10 @@ import javax.ws.rs.Produces;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Path("/")
-@CrossOriginResourceSharing(
-        allowAllOrigins = true,
-        maxAge = 1209600 )
 public class AgentServiceImpl implements AgentService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AgentServiceImpl.class);
@@ -49,7 +45,6 @@ public class AgentServiceImpl implements AgentService {
     @Path("/ask")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    @CrossOriginResourceSharing(allowAllOrigins = true)
     public String ask(String question) {
         LOGGER.info("Asked question: " + question);
         String response = agentDataStore.askQuestion(question);

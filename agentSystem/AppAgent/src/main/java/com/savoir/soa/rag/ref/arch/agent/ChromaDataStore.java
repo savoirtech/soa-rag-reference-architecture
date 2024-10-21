@@ -122,10 +122,9 @@ public class ChromaDataStore implements AgentDataStore {
 
         EmbeddingStore<TextSegment> embeddingStore1 = new InMemoryEmbeddingStore<>();
 
-        //http://localhost:8000 when local, http://chromadb:8000 on docker
         EmbeddingStore<TextSegment> embeddingStore2 = ChromaEmbeddingStore
                 .builder()
-                .baseUrl("http://chromadb:8000")
+                .baseUrl("http://localhost:8000")
                 .collectionName("soa-rag-ref-arch")
                 .logRequests(true)
                 .logResponses(true)
