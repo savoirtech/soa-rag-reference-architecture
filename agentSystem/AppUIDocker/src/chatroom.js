@@ -30,7 +30,7 @@ function sendMessage() {
 }
 
 //uri = "http://karaf-agent/cxf/ai/ask"; uri = "http://localhost/cxf/ai/ask";
-uri = "http://localhost:8182/cxf/ai/ask";
+uri = "http://localhost:8181/cxf/ai/ask";
 
 // Make a POST call
 const userAction = async (myMessage) => {
