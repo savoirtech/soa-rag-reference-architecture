@@ -44,6 +44,7 @@ services:
     image: agent
     depends_on:
       - chromadb
+      - local-ai
     ports:
       - "8102:8101"
       - "8182:8181"
