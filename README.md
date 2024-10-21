@@ -3,7 +3,15 @@
 In this post we’re going to explore a SOA RAG reference architecture.
 
 <figure>
-<img src="./assets/images/ReferenceArch.png" alt="ReferenceArch" />
+<img src="./assets/images/HighLevelDesign.png" alt="HighLevelDesign" />
+</figure>
+
+We’ll start with high level design theory, then discuss an
+implementation.
+
+<figure>
+<img src="./assets/images/SeperationOfConcerns.png"
+alt="SeperationOfConcerns" />
 </figure>
 
 # High Level
@@ -117,13 +125,13 @@ java -cp target/dataSource-1.0.0-SNAPSHOT.jar com.savoir.soa.rag.ref.arch.data.f
 Install feature: feature:repo-add
 mvn:com.savoir.soa.rag.ref.arch/AppFeature/1.0.0-SNAPSHOT/xml/features
 
-webbundle:mvn:com.savoir.soa.rag.ref.arch/AppWar/1.0.0-SNAPSHOT/war?Web-ContextPath=ai
-
-Stand alone web docker:
-<https://mav-rana.medium.com/containerize-a-simple-static-website-a381c5e49633>
-
 Test Chroma docker run -p 8000:8000 -d --rm --name chromadb
 chromadb/chroma:0.5.13
+
+Test LocalAI: docker run -p 8080:8080 --name local-ai -ti
+localai/localai:latest-aio-cpu
+
+UI - set URI Agent - set DB and AI
 
 Sample message body sent to reservations queue.
 
@@ -152,12 +160,6 @@ Sample message body sent to reservations queue.
     }
   ]
 }
-```
-
-Web UI:
-
-``` bash
-http://localhost:8181/ai/
 ```
 
 Testing endpoints:

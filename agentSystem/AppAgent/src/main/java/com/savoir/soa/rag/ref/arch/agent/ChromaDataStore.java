@@ -29,6 +29,8 @@ import dev.langchain4j.rag.DefaultRetrievalAugmentor;
 import dev.langchain4j.rag.RetrievalAugmentor;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
+import dev.langchain4j.rag.query.router.DefaultQueryRouter;
+import dev.langchain4j.rag.query.router.QueryRouter;
 import dev.langchain4j.rag.query.transformer.CompressingQueryTransformer;
 import dev.langchain4j.rag.query.transformer.QueryTransformer;
 import dev.langchain4j.service.AiServices;
@@ -116,19 +118,28 @@ public class ChromaDataStore implements AgentDataStore {
         System.setProperty("OPT_OUT_TRACKING", "true");
         System.setProperty("ai.djl.offline", "true");
 
-
         EmbeddingModel embeddingModel = new OSGiSafeBgeSmallEnV15QuantizedEmbeddingModel();
 
-        EmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
+        EmbeddingStore<TextSegment> embeddingStore1 = new InMemoryEmbeddingStore<>();
+
+        //http://localhost:8000 when local, http://chromadb:8000 on docker
+        EmbeddingStore<TextSegment> embeddingStore2 = ChromaEmbeddingStore
+                .builder()
+                .baseUrl("http://chromadb:8000")
+                .collectionName("soa-rag-ref-arch")
+                .logRequests(true)
+                .logResponses(true)
+                .build();
 
         EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
                 .documentSplitter(DocumentSplitters.recursive(300, 0))
                 .embeddingModel(embeddingModel)
-                .embeddingStore(embeddingStore)
+                .embeddingStore(embeddingStore1)
                 .build();
 
         ingestor.ingest(document);
 
+        //localhost for development, local-ai for docker
         ChatLanguageModel chatLanguageModel = LocalAiChatModel.builder()
                 .baseUrl("http://localhost:8080")
                 .modelName("gpt-4")
@@ -141,16 +152,26 @@ public class ChromaDataStore implements AgentDataStore {
 
         QueryTransformer queryTransformer = new CompressingQueryTransformer(chatLanguageModel);
 
-        ContentRetriever contentRetriever = EmbeddingStoreContentRetriever.builder()
-                .embeddingStore(embeddingStore)
+        ContentRetriever contentRetriever1 = EmbeddingStoreContentRetriever.builder()
+                .embeddingStore(embeddingStore1)
                 .embeddingModel(embeddingModel)
                 .maxResults(2)
                 .minScore(0.6)
                 .build();
 
+        ContentRetriever contentRetriever2 = EmbeddingStoreContentRetriever.builder()
+                .embeddingStore(embeddingStore2)
+                .embeddingModel(embeddingModel)
+                .maxResults(2)
+                .minScore(0.6)
+                .build();
+
+        // Let's create a query router that will route each query to both retrievers.
+        QueryRouter queryRouter = new DefaultQueryRouter(contentRetriever1, contentRetriever2);
+
         RetrievalAugmentor retrievalAugmentor = DefaultRetrievalAugmentor.builder()
                 .queryTransformer(queryTransformer)
-                .contentRetriever(contentRetriever)
+                .queryRouter(queryRouter)
                 .build();
 
         return AiServices.builder(CruiseAssistant.class)
