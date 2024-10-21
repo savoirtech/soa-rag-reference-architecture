@@ -39,7 +39,8 @@ const userAction = async (myMessage) => {
         method: 'POST',
         body: myMessage, // string or object
         headers: {
-            'Content-Type': 'text/plain'
+            'Content-Type': 'text/plain',
+            'Accept': 'text/plain'
         }
     });
     const myReply = await response.text();

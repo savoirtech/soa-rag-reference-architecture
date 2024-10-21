@@ -47,7 +47,9 @@ public class AgentServiceImpl implements AgentService {
     @Produces(MediaType.TEXT_PLAIN)
     public String ask(String question) {
         LOGGER.info("Asked question: " + question);
-        return agentDataStore.askQuestion(question);
+        String response = agentDataStore.askQuestion(question);
+        LOGGER.info("Response: " + response);
+        return response;
     }
 
     @Override
