@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 @Path("/")
 @CrossOriginResourceSharing(
         allowAllOrigins = true,
-        allowCredentials = true,
         maxAge = 1209600 )
 public class AgentServiceImpl implements AgentService {
 
@@ -50,6 +49,7 @@ public class AgentServiceImpl implements AgentService {
     @Path("/ask")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
+    @CrossOriginResourceSharing(allowAllOrigins = true)
     public String ask(String question) {
         LOGGER.info("Asked question: " + question);
         String response = agentDataStore.askQuestion(question);
