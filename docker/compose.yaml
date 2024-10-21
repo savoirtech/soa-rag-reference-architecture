@@ -59,8 +59,6 @@ services:
       - karaf-agent
     ports:
       - "80:80"
-    links:
-      - "karaf-agent"
 
   local-ai:
     image: localai/localai:latest-aio-cpu
