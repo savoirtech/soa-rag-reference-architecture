@@ -41,7 +41,7 @@ public class AgentServiceImpl implements AgentService {
     }
 
     @Override
-    @POST
+    @GET
     @Path("/ask")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
