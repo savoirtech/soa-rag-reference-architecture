@@ -26,7 +26,7 @@ several stages.
 Data sources from our point of view are anything that produces data that
 our system consumes.
 
-In our demo architecture we use JavaFaker to produce inputs to our
+In our demo architecture we use DataFaker to produce inputs to our
 pipeline.
 
 ## Data Landing Zone
