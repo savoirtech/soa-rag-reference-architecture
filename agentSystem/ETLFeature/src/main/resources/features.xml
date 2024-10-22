@@ -28,13 +28,13 @@
         <feature dependency="true">activemq-camel</feature>
         <conditional>
             <condition>activemq-camel</condition>
-            <bundle dependency="true">mvn:commons-io/commons-io/2.15.1</bundle>
-            <bundle dependency="true">wrap:mvn:org.apache.commons/commons-compress/1.27.1</bundle>
-            <bundle dependency="true">wrap:mvn:com.google.code.gson/gson/2.11.0</bundle>
-            <bundle dependency="true">wrap:mvn:com.knuddels/jtokkit/1.1.0</bundle>
-            <bundle dependency="true">mvn:com.fasterxml.jackson.core/jackson-core/2.15.0</bundle>
-            <bundle dependency="true">mvn:com.fasterxml.jackson.core/jackson-annotations/2.15.0</bundle>
-            <bundle dependency="true">mvn:com.fasterxml.jackson.core/jackson-databind/2.15.0</bundle>
+            <bundle dependency="true">mvn:commons-io/commons-io/${commons.io.version}</bundle>
+            <bundle dependency="true">wrap:mvn:org.apache.commons/commons-compress/${commons.compress.version}</bundle>
+            <bundle dependency="true">wrap:mvn:com.google.code.gson/gson/${gson.version}</bundle>
+            <bundle dependency="true">wrap:mvn:com.knuddels/jtokkit/${jtokkit.version}</bundle>
+            <bundle dependency="true">mvn:com.fasterxml.jackson.core/jackson-core/${jackson.version}</bundle>
+            <bundle dependency="true">mvn:com.fasterxml.jackson.core/jackson-annotations/${jackson.version}</bundle>
+            <bundle dependency="true">mvn:com.fasterxml.jackson.core/jackson-databind/${jackson.version}</bundle>
             <bundle start-level="85">mvn:com.savoir.soa.rag.ref.arch/ETL/${project.version}</bundle>
         </conditional>
 
