@@ -29,7 +29,7 @@ function sendMessage() {
     userAction(myMessage);
 }
 
-uri = "http://127.0.0.1:8182/cxf/ai/ask";
+uri = "http://127.0.0.1:8181/cxf/ai/ask";
 
 // Make a POST call
 const userAction = async (myMessage) => {

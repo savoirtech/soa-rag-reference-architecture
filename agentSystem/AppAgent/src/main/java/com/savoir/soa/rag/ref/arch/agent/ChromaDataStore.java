@@ -124,7 +124,7 @@ public class ChromaDataStore implements AgentDataStore {
 
         EmbeddingStore<TextSegment> embeddingStore2 = ChromaEmbeddingStore
                 .builder()
-                .baseUrl("http://chromadb:8000")
+                .baseUrl("http://localhost:8000")
                 .collectionName("soa-rag-ref-arch")
                 .logRequests(true)
                 .logResponses(true)
@@ -140,7 +140,7 @@ public class ChromaDataStore implements AgentDataStore {
 
         //localhost for development, local-ai for docker
         ChatLanguageModel chatLanguageModel = LocalAiChatModel.builder()
-                .baseUrl("http://local-ai:8080")
+                .baseUrl("http://localhost:8080")
                 .modelName("gpt-4")
                 .maxRetries(3)
                 .temperature(0.0)
