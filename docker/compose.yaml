@@ -53,6 +53,6 @@ services:
       - .env
     environment:
       - MODELS_PATH=/models
-      - 'PRELOAD_MODELS=[{"url": "github:go-skynet/model-gallery/gpt4all-j.yaml", "name": "gpt-4"}]'
+#      - 'PRELOAD_MODELS=[{"url": "github:go-skynet/model-gallery/gpt4all-j.yaml", "name": "gpt-4"}]'
     volumes:
       - ./models:/models:cached
