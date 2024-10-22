@@ -39,8 +39,6 @@ const userAction = async (myMessage) => {
         method: 'POST',
         body: myMessage, // string or object
         headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': '*',
             'Content-Type': 'text/plain',
             'Accept': 'text/plain'
         }
