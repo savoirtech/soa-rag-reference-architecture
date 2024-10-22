@@ -31,35 +31,14 @@ services:
       - message-broker
       - chromadb
     ports:
-      - "8101:8101"
-      - "8181:8181"
+      - "8102:8101"
+      - "8182:8181"
     links:
       - "chromadb"
       - "message-broker"
     command: karaf run
     stdin_open: true
     tty: true
-
-  karaf-agent:
-    image: agent
-    depends_on:
-      - chromadb
-      - local-ai
-    ports:
-      - "8102:8101"
-      - "8182:8181"
-    links:
-      - "chromadb"
-    command: karaf run
-    stdin_open: true
-    tty: true
-
-  agent-ui:
-    image: agent-ui:v1
-    depends_on:
-      - karaf-agent
-    ports:
-      - "80:80"
 
   local-ai:
     image: localai/localai:latest-aio-cpu

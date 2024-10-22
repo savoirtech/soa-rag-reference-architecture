@@ -75,12 +75,6 @@ To setup ETL, Agent, and Agent-UI systems as Dockerized Containers:
 ----
 cd ETLDocker/target
 docker build -t etl .
-
-cd AppDocker/target
-docker build -t agent .
-
-cd AppUIDocker
-docker build -t agent-ui:v1 .
 ----
 
 Start supporting services:
@@ -106,19 +100,10 @@ Setup Apache Karaf:
 
 Install feature:
 feature:repo-add mvn:com.savoir.soa.rag.ref.arch/AppFeature/1.0.0-SNAPSHOT/xml/features
+feature:install agent
+feature:install war
+install -s webbundle:mvn:com.savoir.soa.rag.ref.arch/AppWar/${project.version}/war?Web-ContextPath=chat
 
-
-
-
-Test Chroma
-docker run -p 8000:8000  -d --rm --name chromadb chromadb/chroma:0.5.13
-
-Test LocalAI:
-docker run -p 8080:8080 --name local-ai -ti localai/localai:latest-aio-cpu
-
-
-UI - set URI
-Agent - set DB and AI
 
 Sample message body sent to reservations queue.
 [,json,num]

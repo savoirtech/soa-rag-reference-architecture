@@ -65,7 +65,6 @@
         <module>AppAgent</module>
         <module>AppImpl</module>
         <module>AppFeature</module>
-        <module>AppDocker</module>
         <module>AppWar</module>
     </modules>
 
