@@ -20,6 +20,35 @@ Data sources from our point of view are anything that produces data that our sys
 
 In our demo architecture we use DataFaker to produce inputs to our pipeline.
 
+Here is a sample message body sent to data landing zone:
+[,json,num]
+----
+{
+  "firstName": "Claud",
+  "lastName": "Sporer",
+  "streetName": "Zemlak Tunnel",
+  "streetAddress": "9843 Botsford Inlet",
+  "zipcode": "18282",
+  "email": "some.email@fake.email",
+  "cell": "(555) 555-5555",
+  "roomType": "balcony",
+  "excursions": [
+    {
+      "1": "Beach",
+      "2": "JetSki",
+      "3": "Beach"
+    }
+  ],
+  "mealOptions": [
+    {
+      "1": "Italian",
+      "2": "Italian",
+      "3": "WineTasting"
+    }
+  ]
+}
+----
+
 === Data Landing Zone
 
 When data is created and transmitted to our system, the collection of endpoints, brokers, and other services which collect primary data live here.
@@ -157,45 +186,18 @@ mvn clean install
 java -cp target/dataSource-1.0.0-SNAPSHOT.jar com.savoir.soa.rag.ref.arch.data.faker.Publisher
 ----
 
-Setup Apache Karaf:
+Setup Apache Karaf 4.4.6, and start the process to access Karaf's console.
 
-Install feature:
+We use the following console commands to setup the Agent system:
+[,bash,num]
+----
 feature:repo-add mvn:com.savoir.soa.rag.ref.arch/AppFeature/1.0.0-SNAPSHOT/xml/features
 feature:install agent
 feature:install war
 install -s webbundle:mvn:com.savoir.soa.rag.ref.arch/AppWar/${project.version}/war?Web-ContextPath=chat
-
-
-Sample message body sent to reservations queue.
-[,json,num]
-----
-{
-  "firstName": "Claud",
-  "lastName": "Sporer",
-  "streetName": "Zemlak Tunnel",
-  "streetAddress": "9843 Botsford Inlet",
-  "zipcode": "18282",
-  "email": "some.email@fake.email",
-  "cell": "(555) 555-5555",
-  "roomType": "balcony",
-  "excursions": [
-    {
-      "1": "Beach",
-      "2": "JetSki",
-      "3": "Beach"
-    }
-  ],
-  "mealOptions": [
-    {
-      "1": "Italian",
-      "2": "Italian",
-      "3": "WineTasting"
-    }
-  ]
-}
 ----
 
-Testing endpoints:
+Manual Testing Endpoints:
 [,bash,num]
 ----
 curl --location --request POST 'http://127.0.0.1:8181/cxf/ai/ask' \
