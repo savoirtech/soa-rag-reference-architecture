@@ -5,13 +5,13 @@
         <meta charset="UTF-8">
         <title>Cruise Chat</title>
         <link href="https://fonts.googleapis.com/css?family=Asap" rel="stylesheet">
-        <link rel="stylesheet" href="../../css/styles.css">
+        <link rel="stylesheet" href="../css/styles.css">
     </head>
 
     <body>
         <section id="appIntro">
             <div id="titleSection">
-                <img src="../../img/CruiseAgent.gif" height="460" width="240" class="center">
+                <img src="../img/CruiseAgent.gif" height="460" width="240" class="center">
                 <h1 id="appTitle">Cruise Agent AI</h1>
                 <div class="line"></div>
                 <div class="headerImage"></div>
@@ -19,7 +19,7 @@
             <div class="msSection" id="messages">
                 <div class="headerRow">
                     <div class="headerIcon">
-                        <img src="../../img/sysProps.svg"/>
+                        <img src="../img/sysProps.svg"/>
                     </div>
                     <div class="headerTitle" id="sysPropTitle">
                         <h2>Conversation with a Cruise Agent AI</h2>
@@ -51,7 +51,7 @@
                     <span id="footer_cruise_chat></span>
                     <p id="footer_project">A Savoir Technologies Demo</p>
                 </div>
-                <img src="../../img/footer.png"></img>
+                <img src="../img/footer.png"></img>
             </div>
             <p id="footer_copyright">&copy;Copyright Savoir Technologies 2024</p>
         </footer>

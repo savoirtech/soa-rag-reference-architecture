@@ -181,10 +181,10 @@ a {
 }
 
 .collapsed#configSection .caret {
-    background-image: url("../img/carets/caret_down_orange.svg")
+    background-image: url("../webapp/img/carets/caret_down_orange.svg")
 }
 .expanded#configSection .caret {
-    background-image: url("../img/carets/caret_up_orange.svg")
+    background-image: url("../webapp/img/carets/caret_up_orange.svg")
 }
 
 .msSection {
