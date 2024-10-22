@@ -10,8 +10,7 @@ We’ll start with high level design theory, then discuss an
 implementation.
 
 <figure>
-<img src="./assets/images/SeperationOfConcerns.png"
-alt="SeperationOfConcerns" />
+<img src="./assets/images/NoBanner.png" alt="NoBanner" />
 </figure>
 
 # High Level
@@ -82,23 +81,28 @@ embedded store for the LLM.
 
 # Demo
 
+Now that we’ve covered the high level design, lets build our demo
+implementation and deploy it. We’ve taken care to curate several of the
+components as Dockers. Leaving the initial data generation as a small
+Java tool we can execute from the command line, and our Agent system -
+which we’d like to dive deep into.
+
+<figure>
+<img src="./assets/images/Deployment.png" alt="Deployment" />
+</figure>
+
 Build our demo project:
 
 ``` bash
+cd agentSystem
 mvn clean install
 ```
 
-To setup ETL, Agent, and Agent-UI systems as Dockerized Containers:
+To setup ETL as a Dockerized Container:
 
 ``` bash
 cd ETLDocker/target
 docker build -t etl .
-
-cd AppDocker/target
-docker build -t agent .
-
-cd AppUIDocker
-docker build -t agent-ui:v1 .
 ```
 
 Start supporting services:
@@ -126,14 +130,8 @@ Setup Apache Karaf:
 
 Install feature: feature:repo-add
 mvn:com.savoir.soa.rag.ref.arch/AppFeature/1.0.0-SNAPSHOT/xml/features
-
-Test Chroma docker run -p 8000:8000 -d --rm --name chromadb
-chromadb/chroma:0.5.13
-
-Test LocalAI: docker run -p 8080:8080 --name local-ai -ti
-localai/localai:latest-aio-cpu
-
-UI - set URI Agent - set DB and AI
+feature:install agent feature:install war install -s
+webbundle:mvn:com.savoir.soa.rag.ref.arch/AppWar/\${project.version}/war?Web-ContextPath=chat
 
 Sample message body sent to reservations queue.
 

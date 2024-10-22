@@ -6,7 +6,7 @@ image::./assets/images/HighLevelDesign.png[alt=HighLevelDesign,width=480,height=
 
 We'll start with high level design theory, then discuss an implementation.
 
-image::./assets/images/SeperationOfConcerns.png[alt=SeperationOfConcerns,width=480,height=640,align="center"]
+image::./assets/images/NoBanner.png[alt=NoBanner,width=480,height=640,align="center"]
 
 == High Level
 
@@ -64,13 +64,18 @@ Once this pipeline is created, an agent may use the pre-populated embedded store
 
 == Demo
 
+Now that we've covered the high level design, lets build our demo implementation and deploy it. We've taken care to curate several of the components as Dockers. Leaving the initial data generation as a small Java tool we can execute from the command line, and our Agent system - which we'd like to dive deep into.
+
+image::./assets/images/Deployment.png[alt=Deployment,width=480,height=640,align="center"]
+
 Build our demo project:
 [,bash,num]
 ----
+cd agentSystem
 mvn clean install
 ----
 
-To setup ETL, Agent, and Agent-UI systems as Dockerized Containers:
+To setup ETL as a Dockerized Container:
 [,bash,num]
 ----
 cd ETLDocker/target
