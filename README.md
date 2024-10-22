@@ -180,6 +180,13 @@ which we’d like to dive deep into.
 <img src="./assets/images/Deployment.png" alt="Deployment" />
 </figure>
 
+The scenario we’re modeling is a Cruise line processing passenger
+information with respect to an upcoming cruise.
+
+Our Cruise Agent AI will allow the Cruise operator to get a 'feel' for
+their operational needs beyond the base logistics of providing food,
+entertainment, and accommodations.
+
 Build our demo project:
 
 ``` bash

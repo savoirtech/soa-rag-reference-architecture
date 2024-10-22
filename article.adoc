@@ -153,6 +153,10 @@ Now that we've covered the high level design, lets build our demo implementation
 
 image::./assets/images/Deployment.png[alt=Deployment,width=480,height=640,align="center"]
 
+The scenario we're modeling is a Cruise line processing passenger information with respect to an upcoming cruise.
+
+Our Cruise Agent AI will allow the Cruise operator to get a 'feel' for their operational needs beyond the base logistics of providing food, entertainment, and accommodations.
+
 Build our demo project:
 [,bash,num]
 ----
