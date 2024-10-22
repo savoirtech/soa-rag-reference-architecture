@@ -75,6 +75,12 @@ To setup ETL, Agent, and Agent-UI systems as Dockerized Containers:
 ----
 cd ETLDocker/target
 docker build -t etl .
+
+cd AppDocker/target
+docker build -t agent .
+
+cd AppUIDocker
+docker build -t agent-ui:v1 .
 ----
 
 Start supporting services:

@@ -29,13 +29,13 @@ function sendMessage() {
     userAction(myMessage);
 }
 
-//uri = "http://karaf-agent/cxf/ai/ask"; uri = "http://localhost/cxf/ai/ask";
-uri = "http://localhost:8181/cxf/ai/ask";
+uri = "http://127.0.0.1:8181/cxf/ai/ask";
 
 // Make a POST call
 const userAction = async (myMessage) => {
+
     const response = await fetch(uri, {
-        mode: 'no-cors',
+        mode: 'cors',
         method: 'POST',
         body: myMessage, // string or object
         headers: {
@@ -43,6 +43,7 @@ const userAction = async (myMessage) => {
             'Accept': 'text/plain'
         }
     });
+
     const myReply = await response.text();
     messagesTableBody.removeChild(thinkingRow);
     var agentMessageRow = document.createElement('tr');

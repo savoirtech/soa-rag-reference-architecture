@@ -122,6 +122,8 @@ mvn clean install
 java -cp target/dataSource-1.0.0-SNAPSHOT.jar com.savoir.soa.rag.ref.arch.data.faker.Publisher
 ```
 
+Setup Apache Karaf:
+
 Install feature: feature:repo-add
 mvn:com.savoir.soa.rag.ref.arch/AppFeature/1.0.0-SNAPSHOT/xml/features
 

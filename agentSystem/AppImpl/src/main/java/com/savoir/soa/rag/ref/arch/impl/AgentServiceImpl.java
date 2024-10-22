@@ -45,11 +45,14 @@ public class AgentServiceImpl implements AgentService {
     @Path("/ask")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public String ask(String question) {
+    public Response ask(String question) {
         LOGGER.info("Asked question: " + question);
-        String response = agentDataStore.askQuestion(question);
+        String response = "Hello world";//agentDataStore.askQuestion(question);
         LOGGER.info("Response: " + response);
-        return response;
+        return Response.status(200).header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                .header("Access-Control-Allow-Credentials", "true")
+                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD").entity(response).build();
     }
 
     @Override

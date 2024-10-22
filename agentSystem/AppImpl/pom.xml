@@ -52,6 +52,7 @@
             <groupId>com.savoir.soa.rag.ref.arch</groupId>
             <artifactId>AppAgent</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

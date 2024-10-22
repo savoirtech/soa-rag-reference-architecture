@@ -15,9 +15,11 @@
  */
 package com.savoir.soa.rag.ref.arch.api;
 
+import javax.ws.rs.core.Response;
+
 public interface AgentService {
 
-    String ask(String question);
+    Response ask(String question);
 
     String search(String query);
 
