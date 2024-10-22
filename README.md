@@ -54,6 +54,66 @@ Examples: Apache Camel, Apache Flink
 In our demo architecture we use Apache Camel to implement an ETL
 pattern.
 
+<figure>
+<img src="./assets/images/Routes.png" alt="Routes" />
+</figure>
+
+Here we illustrate incoming JSON bodies are extracted from JMS queue,
+Transformed into a format our system can use, Metadata enrichment
+occurs, then we load this data into Chroma DB.
+
+``` xml
+<!-- Camel configuration -->
+    <camelContext id="etl-camelContext" trace="false" xmlns="http://camel.apache.org/schema/blueprint" >
+
+        <!-- Accept the order -->
+        <route id="ETL">
+            <!-- Take message off broker queue, pass json body to camel pipeline -->
+            <from id="Extract" uri="jmsConsumer:queue:reservations"/>
+            <!-- Transform and add Metadata to embedding document -->
+            <process id="Transform" ref="TransformProcessor"/>
+            <!-- Load into Chroma -->
+            <process id="Load" ref="LoadChromaProcessor"/>
+        </route>
+
+    </camelContext>
+```
+
+Our ETL Camel route is wired in Blueprint XML.
+
+``` java
+@Override
+public void process(Exchange exchange) throws Exception {
+    String body = exchange.getIn().getBody(String.class);
+    //Use body and data sources to generate metadata for this embedding.
+    Metadata metadata = new Metadata();
+    metadata.put("tenant", "savoir");
+    metadata.put("chargeBacks", String.valueOf(chanceOf(2)));
+    metadata.put("altercations", String.valueOf(chanceOf(2)));
+    metadata.put("casinoUsed", String.valueOf(chanceOf(50)));
+    metadata.put("loyaltyLevel", randomLoyaltyLevel());
+    TextSegment textSegment = TextSegment.from(body, metadata);
+    exchange.getIn().setBody(textSegment);
+}
+```
+
+Above, our Transform Camel Processor handles making TextSegments.
+LangChain4j provides a Metadata structure which we append to our
+TextSegments.
+
+``` java
+@Override
+public void process(Exchange exchange) throws Exception {
+    TextSegment textSegment = exchange.getIn().getBody(TextSegment.class);
+    EmbeddingModel embeddingModel = new OSGiSafeBgeSmallEnV15QuantizedEmbeddingModel();
+    Embedding embedding = embeddingModel.embed(textSegment).content();
+    chromaDataStore.add(embedding, textSegment);
+}
+```
+
+Our Chroma DB loading Camel Processor performs an add action upon our
+datastore.
+
 ## Vector Database
 
 In generative AI settings a Vector Database acts as the memory for
