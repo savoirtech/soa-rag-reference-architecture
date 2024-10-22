@@ -47,7 +47,7 @@ public class AgentServiceImpl implements AgentService {
     @Produces(MediaType.TEXT_PLAIN)
     public Response ask(String question) {
         LOGGER.info("Asked question: " + question);
-        String response = "Hello world";//agentDataStore.askQuestion(question);
+        String response = agentDataStore.askQuestion(question);
         LOGGER.info("Response: " + response);
         return Response.status(200).header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
