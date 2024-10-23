@@ -21,6 +21,12 @@ segment data and query embeddings before a user required to use them.
 To achieve this an architect may design a data pipeline that contains
 several stages.
 
+Sample Data Pipeline:
+
+Data Source → Data Landing Zone → ETL → Vector DataStore
+
+Let’s discuss each of these stages.
+
 ## Data Source
 
 Data sources from our point of view are anything that produces data that
