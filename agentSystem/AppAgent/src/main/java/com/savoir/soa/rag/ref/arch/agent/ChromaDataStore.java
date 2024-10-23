@@ -30,6 +30,7 @@ import dev.langchain4j.rag.RetrievalAugmentor;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
 import dev.langchain4j.rag.query.router.DefaultQueryRouter;
+import dev.langchain4j.rag.query.router.LanguageModelQueryRouter;
 import dev.langchain4j.rag.query.router.QueryRouter;
 import dev.langchain4j.rag.query.transformer.CompressingQueryTransformer;
 import dev.langchain4j.rag.query.transformer.QueryTransformer;
@@ -49,7 +50,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.io.IOUtils;
 
 import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
@@ -118,7 +121,7 @@ public class ChromaDataStore implements AgentDataStore {
         System.setProperty("OPT_OUT_TRACKING", "true");
         System.setProperty("ai.djl.offline", "true");
 
-        EmbeddingModel embeddingModel = new OSGiSafeBgeSmallEnV15QuantizedEmbeddingModel();
+        EmbeddingModel embeddingModel = (EmbeddingModel) new OSGiSafeBgeSmallEnV15QuantizedEmbeddingModel();
 
         EmbeddingStore<TextSegment> embeddingStore1 = new InMemoryEmbeddingStore<>();
 
@@ -138,10 +141,9 @@ public class ChromaDataStore implements AgentDataStore {
 
         ingestor.ingest(document);
 
-        //localhost for development, local-ai for docker
         ChatLanguageModel chatLanguageModel = LocalAiChatModel.builder()
                 .baseUrl("http://localhost:8080")
-                .modelName("text-embedding-ada-002")
+                .modelName("gpt-4o")
                 .maxRetries(3)
                 .temperature(0.0)
                 .maxTokens(500)
@@ -166,7 +168,12 @@ public class ChromaDataStore implements AgentDataStore {
                 .build();
 
         // Let's create a query router that will route each query to both retrievers.
-        QueryRouter queryRouter = new DefaultQueryRouter(contentRetriever1, contentRetriever2);
+        //QueryRouter queryRouter = new DefaultQueryRouter(contentRetriever1, contentRetriever2);
+        // Let's create a query route that decides which content is more relevant
+        Map<ContentRetriever, String> retrieverToDescription = new HashMap<>();
+        retrieverToDescription.put(contentRetriever1, "details about the Cruse Ship");
+        retrieverToDescription.put(contentRetriever2, "reservations made by passengers");
+        QueryRouter queryRouter = new LanguageModelQueryRouter(chatLanguageModel, retrieverToDescription);
 
         RetrievalAugmentor retrievalAugmentor = DefaultRetrievalAugmentor.builder()
                 .queryTransformer(queryTransformer)
