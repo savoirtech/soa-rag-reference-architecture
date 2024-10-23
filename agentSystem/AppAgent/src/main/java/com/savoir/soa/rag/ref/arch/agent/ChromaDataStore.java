@@ -64,7 +64,7 @@ public class ChromaDataStore implements AgentDataStore {
     private ChromaEmbeddingStore chromaEmbeddingStore;
     private EmbeddingModel embeddingModel = new OSGiSafeBgeSmallEnV15QuantizedEmbeddingModel();
 
-    private CruiseAssistant assistant = createAssistant("cruise-ship.txt", "tenant", "savoir");
+    private CruiseAssistant assistant = createAssistant("cruise-ship.txt");
 
     public ChromaDataStore(String baseUrl, String collectionName) {
         this.baseUrl = baseUrl;
@@ -113,11 +113,7 @@ public class ChromaDataStore implements AgentDataStore {
         return assistant.answer(question);
     }
 
-    private static CruiseAssistant cruiseAssistant(String documentPath) {
-        return createAssistant(documentPath, null, null);
-    }
-
-    private static CruiseAssistant createAssistant(String documentPath, String filterKey, String filterValue) {
+    private static CruiseAssistant createAssistant(String documentPath) {
 
         Document document = loadDocument(toPath(documentPath), new TextDocumentParser());
 
@@ -163,20 +159,43 @@ public class ChromaDataStore implements AgentDataStore {
                 .minScore(0.6)
                 .build();
 
-        Filter cruiseFilter = metadataKey(filterKey).isEqualTo(filterValue);
+
+        Filter cruiseFilter = metadataKey("tenant").isEqualTo("savoir");
 
         ContentRetriever contentRetriever2 = EmbeddingStoreContentRetriever.builder()
                 .embeddingStore(embeddingStore2)
                 .embeddingModel(embeddingModel)
-                .maxResults(2)
-                .minScore(0.6)
                 .filter(cruiseFilter)
+                .build();
+
+        Filter chargeBacks = metadataKey("chargeBacks").isEqualTo("true");
+
+        ContentRetriever contentRetrieverChargeBacks = EmbeddingStoreContentRetriever.builder()
+                .embeddingStore(embeddingStore2)
+                .embeddingModel(embeddingModel)
+                .filter(chargeBacks)
+                .build();
+
+        Filter goldLoyalty = metadataKey("loyaltyLevel").isEqualTo("gold");
+
+        ContentRetriever contentRetrieverGoldLoyalty = EmbeddingStoreContentRetriever.builder()
+                .embeddingStore(embeddingStore2)
+                .embeddingModel(embeddingModel)
+                .filter(goldLoyalty)
                 .build();
 
         // Let's create a query route that decides which content is more relevant
         Map<ContentRetriever, String> retrieverToDescription = new HashMap<>();
         retrieverToDescription.put(contentRetriever1, "details about the Cruse Ship");
-        retrieverToDescription.put(contentRetriever2, "reservations made by passengers");
+        retrieverToDescription.put(contentRetriever2, "Passenger");
+        retrieverToDescription.put(contentRetriever2, "Reservations");
+        retrieverToDescription.put(contentRetriever2, "Booking");
+        retrieverToDescription.put(contentRetriever2, "Room Type");
+        retrieverToDescription.put(contentRetriever2, "Planned Excursions");
+        retrieverToDescription.put(contentRetriever2, "Meal options");
+        retrieverToDescription.put(contentRetrieverGoldLoyalty, "Gold Loyalty Level");
+        retrieverToDescription.put(contentRetriever2, "Casino");
+        retrieverToDescription.put(contentRetrieverChargeBacks, "charge backs");
         QueryRouter queryRouter = new LanguageModelQueryRouter(chatLanguageModel, retrieverToDescription);
 
         RetrievalAugmentor retrievalAugmentor = DefaultRetrievalAugmentor.builder()
