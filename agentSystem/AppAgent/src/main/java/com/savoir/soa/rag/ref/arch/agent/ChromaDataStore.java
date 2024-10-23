@@ -144,7 +144,7 @@ public class ChromaDataStore implements AgentDataStore {
                 .modelName("gpt-4o")
                 .maxRetries(3)
                 .temperature(0.0)
-                .maxTokens(50)
+                .maxTokens(500)
                 .logRequests(true)
                 .logResponses(true)
                 .build();

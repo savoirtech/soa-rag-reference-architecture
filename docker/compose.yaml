@@ -41,7 +41,7 @@ services:
     tty: true
 
   local-ai:
-    image: localai/localai:v2.22.1-aio-cpu
+    image: localai/localai:v2.22.1-aio-gpu-nvidia-cuda-11
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8080/readyz" ]
       interval: 1m
