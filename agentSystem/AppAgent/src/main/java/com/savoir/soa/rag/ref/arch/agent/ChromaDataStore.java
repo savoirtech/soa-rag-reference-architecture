@@ -29,7 +29,6 @@ import dev.langchain4j.rag.DefaultRetrievalAugmentor;
 import dev.langchain4j.rag.RetrievalAugmentor;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
-import dev.langchain4j.rag.query.router.DefaultQueryRouter;
 import dev.langchain4j.rag.query.router.LanguageModelQueryRouter;
 import dev.langchain4j.rag.query.router.QueryRouter;
 import dev.langchain4j.rag.query.transformer.CompressingQueryTransformer;
@@ -65,7 +64,7 @@ public class ChromaDataStore implements AgentDataStore {
     private ChromaEmbeddingStore chromaEmbeddingStore;
     private EmbeddingModel embeddingModel = new OSGiSafeBgeSmallEnV15QuantizedEmbeddingModel();
 
-    private CruiseAssistant assistant = createAssistant("cruise-ship.txt");
+    private CruiseAssistant assistant = createAssistant("cruise-ship.txt", "tenant", "savoir");
 
     public ChromaDataStore(String baseUrl, String collectionName) {
         this.baseUrl = baseUrl;
@@ -114,7 +113,11 @@ public class ChromaDataStore implements AgentDataStore {
         return assistant.answer(question);
     }
 
-    private static CruiseAssistant createAssistant(String documentPath) {
+    private static CruiseAssistant cruiseAssistant(String documentPath) {
+        return createAssistant(documentPath, null, null);
+    }
+
+    private static CruiseAssistant createAssistant(String documentPath, String filterKey, String filterValue) {
 
         Document document = loadDocument(toPath(documentPath), new TextDocumentParser());
 
@@ -160,15 +163,16 @@ public class ChromaDataStore implements AgentDataStore {
                 .minScore(0.6)
                 .build();
 
+        Filter cruiseFilter = metadataKey(filterKey).isEqualTo(filterValue);
+
         ContentRetriever contentRetriever2 = EmbeddingStoreContentRetriever.builder()
                 .embeddingStore(embeddingStore2)
                 .embeddingModel(embeddingModel)
                 .maxResults(2)
                 .minScore(0.6)
+                .filter(cruiseFilter)
                 .build();
 
-        // Let's create a query router that will route each query to both retrievers.
-        //QueryRouter queryRouter = new DefaultQueryRouter(contentRetriever1, contentRetriever2);
         // Let's create a query route that decides which content is more relevant
         Map<ContentRetriever, String> retrieverToDescription = new HashMap<>();
         retrieverToDescription.put(contentRetriever1, "details about the Cruse Ship");
