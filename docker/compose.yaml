@@ -41,7 +41,7 @@ services:
     tty: true
 
   local-ai:
-    image: localai/localai:latest-aio-cpu
+    image: localai/localai:v2.22.1-aio-cpu
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8080/readyz" ]
       interval: 1m
@@ -53,6 +53,6 @@ services:
       - .env
     environment:
       - MODELS_PATH=/models
-#      - 'PRELOAD_MODELS=[{"url": "github:go-skynet/model-gallery/gpt4all-j.yaml", "name": "gpt-4"}]'
+      - 'PRELOAD_MODELS=[{"url": "github:go-skynet/model-gallery/gpt4all-j.yaml", "name": "gpt-4"}]'
     volumes:
       - ./models:/models:cached
