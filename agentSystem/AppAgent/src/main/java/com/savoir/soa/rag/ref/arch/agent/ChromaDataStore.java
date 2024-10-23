@@ -141,7 +141,7 @@ public class ChromaDataStore implements AgentDataStore {
         //localhost for development, local-ai for docker
         ChatLanguageModel chatLanguageModel = LocalAiChatModel.builder()
                 .baseUrl("http://localhost:8080")
-                .modelName("gpt-4")
+                .modelName("gpt-4o")
                 .maxRetries(3)
                 .temperature(0.0)
                 .maxTokens(50)
