@@ -45,7 +45,7 @@ public class Publisher {
         int port = Integer.parseInt(env("ACTIVEMQ_PORT", "61616"));
         String destination = arg(args, 0, "reservations");
 
-        int messages = 10000;
+        int messages = 100;
 
         ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory("tcp://" + host + ":" + port);
 
@@ -98,7 +98,7 @@ public class Publisher {
             TextMessage msg = session.createTextMessage(json);
             msg.setIntProperty("id", i);
             producer.send(msg);
-            if( (i % 1000) == 0) {
+            if( (i % 10) == 0) {
                 System.out.println(String.format("Sent %d messages", i));
             }
         }
