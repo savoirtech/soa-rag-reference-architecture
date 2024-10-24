@@ -156,8 +156,8 @@ public class ChromaDataStore implements AgentDataStore {
         ChatLanguageModel chatLanguageModel = LocalAiChatModel.builder()
                 .baseUrl("http://localhost:8080")
                 .modelName("gpt-4o")
-                .maxRetries(3)
-                .timeout(Duration.ofSeconds(30))
+                .maxRetries(0)
+                .timeout(Duration.ofSeconds(50))
                 .temperature(0.7)
                 .maxTokens(100)
                 .logRequests(true)
@@ -194,11 +194,11 @@ public class ChromaDataStore implements AgentDataStore {
 //                .promptTemplate(promptTemplate)
 //                .build();
 
-        QueryRouter queryRouter = new DefaultQueryRouter(cruiseInformationRetriever, reservationInformationRetriever);
+        QueryRouter queryRouter = new DefaultQueryRouter(cruiseInformationRetriever);
 
         Map<Query, Collection<List<Content>>> map = new HashMap<>();
-        Query query = new Query("Is Gold loyalty level?");
-        Embedding queryEmbedding = embeddingModel.embed("gold loyalty level").content();
+        Query query = new Query("Has Gold loyalty level?");
+        Embedding queryEmbedding = embeddingModel.embed("gold").content();
         List<EmbeddingMatch<TextSegment>> relevant = this.chromaEmbeddingStore.findRelevant(queryEmbedding, 10);
         LOGGER.info("Found relevant matches: " + relevant.size());
         Collection<List<Content>> ourContent = findingsToContent(relevant);
