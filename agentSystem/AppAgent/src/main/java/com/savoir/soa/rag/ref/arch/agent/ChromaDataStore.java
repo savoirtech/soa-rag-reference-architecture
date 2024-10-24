@@ -28,11 +28,8 @@ import dev.langchain4j.model.localai.LocalAiChatModel;
 import dev.langchain4j.rag.DefaultRetrievalAugmentor;
 import dev.langchain4j.rag.RetrievalAugmentor;
 import dev.langchain4j.rag.content.Content;
-import dev.langchain4j.rag.content.aggregator.ContentAggregator;
-import dev.langchain4j.rag.content.aggregator.DefaultContentAggregator;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
-import dev.langchain4j.rag.query.Query;
 import dev.langchain4j.rag.query.router.DefaultQueryRouter;
 import dev.langchain4j.rag.query.router.QueryRouter;
 import dev.langchain4j.rag.query.transformer.CompressingQueryTransformer;
@@ -56,9 +53,7 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -183,20 +178,10 @@ public class ChromaDataStore implements AgentDataStore {
 
         QueryRouter queryRouter = new DefaultQueryRouter(cruiseInformationRetriever, reservationInformationRetriever);
 
-//        Map<Query, Collection<List<Content>>> map = new HashMap<>();
-//        Query query = new Query("Has Gold loyalty level?");
-//        Embedding queryEmbedding = embeddingModel.embed("gold").content();
-//        List<EmbeddingMatch<TextSegment>> relevant = this.chromaEmbeddingStore.findRelevant(queryEmbedding, 10);
-//        LOGGER.info("Found relevant matches: " + relevant.size());
-//        Collection<List<Content>> ourContent = findingsToContent(relevant);
-//        map.put(query, ourContent);
-//        ContentAggregator contentAggregator = new DefaultContentAggregator();
-//        contentAggregator.aggregate(map);
 
         RetrievalAugmentor retrievalAugmentor = DefaultRetrievalAugmentor.builder()
                 .queryTransformer(queryTransformer)
                 .queryRouter(queryRouter)
-                //.contentAggregator(contentAggregator)
                 .build();
 
         return AiServices.builder(CruiseAssistant.class)
