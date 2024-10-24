@@ -59,6 +59,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
 import static dev.langchain4j.store.embedding.filter.MetadataFilterBuilder.metadataKey;
@@ -69,6 +71,7 @@ public class ChromaDataStore implements AgentDataStore {
     private String collectionName;
     private ChromaEmbeddingStore chromaEmbeddingStore;
     private EmbeddingModel embeddingModel = (EmbeddingModel) new OSGiSafeBgeSmallEnV15QuantizedEmbeddingModel();
+    private static final Logger LOGGER = LoggerFactory.getLogger(ChromaDataStore.class);
 
     private CruiseAssistant assistant;
 
@@ -99,7 +102,7 @@ public class ChromaDataStore implements AgentDataStore {
 
         EmbeddingSearchResult<TextSegment> searchResult = this.chromaEmbeddingStore.search(request);
         EmbeddingMatch<TextSegment> embeddingMatch = searchResult.matches().get(0);
-        System.out.println("Found matches: " + searchResult.matches().size());
+        LOGGER.info("Found matches: " + searchResult.matches().size());
         return embeddingMatch.embedded().text();
     }
 
@@ -111,7 +114,7 @@ public class ChromaDataStore implements AgentDataStore {
         List<EmbeddingMatch<TextSegment>> relevant = this.chromaEmbeddingStore.findRelevant(queryEmbedding, 1);
         EmbeddingMatch<TextSegment> embeddingMatch = relevant.get(0);
 
-        System.out.println("Found relevant matches: " + relevant.size());
+        LOGGER.info("Found relevant matches: " + relevant.size());
         return embeddingMatch.embedded().text();
     }
 
@@ -177,14 +180,15 @@ public class ChromaDataStore implements AgentDataStore {
 
         // Let's create a query route that decides which content is more relevant
         Map<ContentRetriever, String> retrieverToDescription = new HashMap<>();
-        retrieverToDescription.put(contentRetriever1, "details about the Cruse Ship");
-        retrieverToDescription.put(contentRetriever2, "Passenger, Reservations, Booking, Room Type, Planned Excursions, Meal options, Gold Loyalty Level, Casino, charge backs");
+        retrieverToDescription.put(contentRetriever1, "Details about the Cruse Ship");
+        retrieverToDescription.put(contentRetriever2, "Passenger Reservation, Booking, Room Type, Planned Excursions, Meal options, Gold Loyalty Level, Casino, charge backs");
         QueryRouter queryRouter = new LanguageModelQueryRouter(chatLanguageModel, retrieverToDescription);
 
         Map<Query, Collection<List<Content>>> map = new HashMap<>();
         Query query = new Query("Plans to skydive");
         Embedding queryEmbedding = embeddingModel.embed("Plans to skydive").content();
         List<EmbeddingMatch<TextSegment>> relevant = this.chromaEmbeddingStore.findRelevant(queryEmbedding, 10);
+        LOGGER.info("Found relevant matches: " + relevant.size());
         Collection<List<Content>> ourContent = findingsToContent(relevant);
         map.put(query, ourContent);
         ContentAggregator contentAggregator = new DefaultContentAggregator();
