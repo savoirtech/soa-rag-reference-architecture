@@ -155,11 +155,12 @@ public class ChromaDataStore implements AgentDataStore {
 
         ChatLanguageModel chatLanguageModel = LocalAiChatModel.builder()
                 .baseUrl("http://localhost:8080")
-                .modelName("gpt-4o")
+                //.modelName("gpt-4o")
+                .modelName("llama-3.2-1b-instruct:q4_k_m")
                 .maxRetries(0)
-                .timeout(Duration.ofSeconds(60))
-                .temperature(0.3)
-                .maxTokens(500)
+                .timeout(Duration.ofSeconds(90))
+                .temperature(0.5)
+                .maxTokens(250)
                 .logRequests(true)
                 .logResponses(true)
                 .build();
