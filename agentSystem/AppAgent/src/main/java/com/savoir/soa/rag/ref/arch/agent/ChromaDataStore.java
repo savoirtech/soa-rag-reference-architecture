@@ -173,14 +173,14 @@ public class ChromaDataStore implements AgentDataStore {
                 .minScore(0.6)
                 .build();
 
-//        Filter cruiseFilter = metadataKey("tenant").isEqualTo("savoir");
-//
-//        ContentRetriever reservationInformationRetriever = EmbeddingStoreContentRetriever.builder()
-//                .embeddingStore(embeddingStore2)
-//                .embeddingModel(embeddingModel)
-//                .filter(cruiseFilter)
-//                .displayName("default")
-//                .build();
+        Filter cruiseFilter = metadataKey("tenant").isEqualTo("savoir");
+
+        ContentRetriever reservationInformationRetriever = EmbeddingStoreContentRetriever.builder()
+                .embeddingStore(embeddingStore2)
+                .embeddingModel(embeddingModel)
+                .filter(cruiseFilter)
+                .displayName("default")
+                .build();
 
         // Let's create a query route that decides which content is more relevant
 //        Map<ContentRetriever, String> retrieverToDescription = new HashMap<>();
@@ -194,7 +194,7 @@ public class ChromaDataStore implements AgentDataStore {
 //                .promptTemplate(promptTemplate)
 //                .build();
 
-        QueryRouter queryRouter = new DefaultQueryRouter(cruiseInformationRetriever);
+        QueryRouter queryRouter = new DefaultQueryRouter(cruiseInformationRetriever, reservationInformationRetriever);
 
         Map<Query, Collection<List<Content>>> map = new HashMap<>();
         Query query = new Query("Has Gold loyalty level?");
