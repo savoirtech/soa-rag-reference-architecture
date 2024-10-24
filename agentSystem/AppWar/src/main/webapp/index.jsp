@@ -22,7 +22,7 @@
                         <img src="img/sysProps.svg"/>
                     </div>
                     <div class="headerTitle" id="sysPropTitle">
-                        <h2>Conversation with a Cruise Agent AI</h2>
+                        <h2>Cruise Agent AI for Gold Loyalty Tier</h2>
                     </div>
                 </div>
                 <div class="sectionContent">

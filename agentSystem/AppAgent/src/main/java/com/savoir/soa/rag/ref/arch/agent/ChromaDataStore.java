@@ -24,7 +24,6 @@ import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
-import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.model.localai.LocalAiChatModel;
 import dev.langchain4j.rag.DefaultRetrievalAugmentor;
 import dev.langchain4j.rag.RetrievalAugmentor;
@@ -35,7 +34,6 @@ import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
 import dev.langchain4j.rag.query.Query;
 import dev.langchain4j.rag.query.router.DefaultQueryRouter;
-import dev.langchain4j.rag.query.router.LanguageModelQueryRouter;
 import dev.langchain4j.rag.query.router.QueryRouter;
 import dev.langchain4j.rag.query.transformer.CompressingQueryTransformer;
 import dev.langchain4j.rag.query.transformer.QueryTransformer;
@@ -182,18 +180,6 @@ public class ChromaDataStore implements AgentDataStore {
                 .filter(cruiseFilter)
                 .displayName("default")
                 .build();
-
-        // Let's create a query route that decides which content is more relevant
-//        Map<ContentRetriever, String> retrieverToDescription = new HashMap<>();
-//        retrieverToDescription.put(cruiseInformationRetriever, "details about the cruse ship");
-//        retrieverToDescription.put(reservationInformationRetriever, "passenger reservation details");
-//
-//        PromptTemplate promptTemplate = PromptTemplate.from("Based on the user query, use data source(s) to retrieve relevant information from the following options:\n{{options}}\nIt is very important that your answer contains cruise information and reservation data!\nUser query: {{query}}");
-//        QueryRouter queryRouter = LanguageModelQueryRouter.builder()
-//                .chatLanguageModel(chatLanguageModel)
-//                .retrieverToDescription(retrieverToDescription)
-//                .promptTemplate(promptTemplate)
-//                .build();
 
         QueryRouter queryRouter = new DefaultQueryRouter(cruiseInformationRetriever, reservationInformationRetriever);
 
