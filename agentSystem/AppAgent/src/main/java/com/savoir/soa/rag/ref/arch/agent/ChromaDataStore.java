@@ -214,8 +214,6 @@ public class ChromaDataStore implements AgentDataStore {
                 .chatLanguageModel(chatLanguageModel)
                 .retrievalAugmentor(retrievalAugmentor)
                 .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
-                .contentRetriever(cruiseInformationRetriever)
-                .contentRetriever(reservationInformationRetriever)
                 .build();
     }
 
