@@ -55,6 +55,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -156,8 +157,9 @@ public class ChromaDataStore implements AgentDataStore {
                 .baseUrl("http://localhost:8080")
                 .modelName("gpt-4o")
                 .maxRetries(3)
-                .temperature(0.0)
-                .maxTokens(500)
+                .timeout(Duration.ofSeconds(30))
+                .temperature(0.7)
+                .maxTokens(100)
                 .logRequests(true)
                 .logResponses(true)
                 .build();
