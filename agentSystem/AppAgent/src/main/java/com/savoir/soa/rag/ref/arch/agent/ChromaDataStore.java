@@ -68,9 +68,9 @@ public class ChromaDataStore implements AgentDataStore {
     private String baseUrl;
     private String collectionName;
     private ChromaEmbeddingStore chromaEmbeddingStore;
-    private EmbeddingModel embeddingModel = new OSGiSafeBgeSmallEnV15QuantizedEmbeddingModel();
+    private EmbeddingModel embeddingModel = (EmbeddingModel) new OSGiSafeBgeSmallEnV15QuantizedEmbeddingModel();
 
-    private CruiseAssistant assistant = createAssistant("cruise-ship.txt");
+    private CruiseAssistant assistant;
 
     public ChromaDataStore(String baseUrl, String collectionName) {
         this.baseUrl = baseUrl;
@@ -81,6 +81,7 @@ public class ChromaDataStore implements AgentDataStore {
                 .logResponses(true)
                 .collectionName(collectionName)
                 .build();
+        assistant = createAssistant("cruise-ship.txt");
     }
 
     @Override
@@ -119,7 +120,7 @@ public class ChromaDataStore implements AgentDataStore {
         return assistant.answer(question);
     }
 
-    private static CruiseAssistant createAssistant(String documentPath) {
+    private CruiseAssistant createAssistant(String documentPath) {
 
         Document document = loadDocument(toPath(documentPath), new TextDocumentParser());
 
