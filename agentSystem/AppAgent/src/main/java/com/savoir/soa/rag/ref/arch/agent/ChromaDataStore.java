@@ -181,7 +181,7 @@ public class ChromaDataStore implements AgentDataStore {
         // Let's create a query route that decides which content is more relevant
         Map<ContentRetriever, String> retrieverToDescription = new HashMap<>();
         retrieverToDescription.put(contentRetriever1, "Details about the Cruse Ship");
-        retrieverToDescription.put(contentRetriever2, "Passenger Reservation, Booking, Room Type, Planned Excursions, Meal options, Gold Loyalty Level, Casino, charge backs");
+        retrieverToDescription.put(contentRetriever2, "Passenger Reservation details");
         QueryRouter queryRouter = new LanguageModelQueryRouter(chatLanguageModel, retrieverToDescription);
 
         Map<Query, Collection<List<Content>>> map = new HashMap<>();
