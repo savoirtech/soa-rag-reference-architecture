@@ -157,9 +157,9 @@ public class ChromaDataStore implements AgentDataStore {
                 .baseUrl("http://localhost:8080")
                 .modelName("gpt-4o")
                 .maxRetries(0)
-                .timeout(Duration.ofSeconds(50))
-                .temperature(0.7)
-                .maxTokens(100)
+                .timeout(Duration.ofSeconds(60))
+                .temperature(0.3)
+                .maxTokens(500)
                 .logRequests(true)
                 .logResponses(true)
                 .build();
@@ -173,14 +173,14 @@ public class ChromaDataStore implements AgentDataStore {
                 .minScore(0.6)
                 .build();
 
-        Filter cruiseFilter = metadataKey("tenant").isEqualTo("savoir");
-
-        ContentRetriever reservationInformationRetriever = EmbeddingStoreContentRetriever.builder()
-                .embeddingStore(embeddingStore2)
-                .embeddingModel(embeddingModel)
-                .filter(cruiseFilter)
-                .displayName("default")
-                .build();
+//        Filter cruiseFilter = metadataKey("tenant").isEqualTo("savoir");
+//
+//        ContentRetriever reservationInformationRetriever = EmbeddingStoreContentRetriever.builder()
+//                .embeddingStore(embeddingStore2)
+//                .embeddingModel(embeddingModel)
+//                .filter(cruiseFilter)
+//                .displayName("default")
+//                .build();
 
         // Let's create a query route that decides which content is more relevant
 //        Map<ContentRetriever, String> retrieverToDescription = new HashMap<>();
