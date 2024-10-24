@@ -27,8 +27,12 @@ import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.localai.LocalAiChatModel;
 import dev.langchain4j.rag.DefaultRetrievalAugmentor;
 import dev.langchain4j.rag.RetrievalAugmentor;
+import dev.langchain4j.rag.content.Content;
+import dev.langchain4j.rag.content.aggregator.ContentAggregator;
+import dev.langchain4j.rag.content.aggregator.DefaultContentAggregator;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
+import dev.langchain4j.rag.query.Query;
 import dev.langchain4j.rag.query.router.LanguageModelQueryRouter;
 import dev.langchain4j.rag.query.router.QueryRouter;
 import dev.langchain4j.rag.query.transformer.CompressingQueryTransformer;
@@ -49,6 +53,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -159,48 +165,34 @@ public class ChromaDataStore implements AgentDataStore {
                 .minScore(0.6)
                 .build();
 
-
         Filter cruiseFilter = metadataKey("tenant").isEqualTo("savoir");
 
         ContentRetriever contentRetriever2 = EmbeddingStoreContentRetriever.builder()
                 .embeddingStore(embeddingStore2)
                 .embeddingModel(embeddingModel)
                 .filter(cruiseFilter)
-                .build();
-
-        Filter chargeBacks = metadataKey("chargeBacks").isEqualTo("true");
-
-        ContentRetriever contentRetrieverChargeBacks = EmbeddingStoreContentRetriever.builder()
-                .embeddingStore(embeddingStore2)
-                .embeddingModel(embeddingModel)
-                .filter(chargeBacks)
-                .build();
-
-        Filter goldLoyalty = metadataKey("loyaltyLevel").isEqualTo("gold");
-
-        ContentRetriever contentRetrieverGoldLoyalty = EmbeddingStoreContentRetriever.builder()
-                .embeddingStore(embeddingStore2)
-                .embeddingModel(embeddingModel)
-                .filter(goldLoyalty)
+                .displayName("default")
                 .build();
 
         // Let's create a query route that decides which content is more relevant
         Map<ContentRetriever, String> retrieverToDescription = new HashMap<>();
         retrieverToDescription.put(contentRetriever1, "details about the Cruse Ship");
-        retrieverToDescription.put(contentRetriever2, "Passenger");
-        retrieverToDescription.put(contentRetriever2, "Reservations");
-        retrieverToDescription.put(contentRetriever2, "Booking");
-        retrieverToDescription.put(contentRetriever2, "Room Type");
-        retrieverToDescription.put(contentRetriever2, "Planned Excursions");
-        retrieverToDescription.put(contentRetriever2, "Meal options");
-        retrieverToDescription.put(contentRetrieverGoldLoyalty, "Gold Loyalty Level");
-        retrieverToDescription.put(contentRetriever2, "Casino");
-        retrieverToDescription.put(contentRetrieverChargeBacks, "charge backs");
+        retrieverToDescription.put(contentRetriever2, "Passenger, Reservations, Booking, Room Type, Planned Excursions, Meal options, Gold Loyalty Level, Casino, charge backs");
         QueryRouter queryRouter = new LanguageModelQueryRouter(chatLanguageModel, retrieverToDescription);
+
+        Map<Query, Collection<List<Content>>> map = new HashMap<>();
+        Query query = new Query("Plans to skydive");
+        Embedding queryEmbedding = embeddingModel.embed("Plans to skydive").content();
+        List<EmbeddingMatch<TextSegment>> relevant = this.chromaEmbeddingStore.findRelevant(queryEmbedding, 10);
+        Collection<List<Content>> ourContent = findingsToContent(relevant);
+        map.put(query, ourContent);
+        ContentAggregator contentAggregator = new DefaultContentAggregator();
+        contentAggregator.aggregate(map);
 
         RetrievalAugmentor retrievalAugmentor = DefaultRetrievalAugmentor.builder()
                 .queryTransformer(queryTransformer)
                 .queryRouter(queryRouter)
+                .contentAggregator(contentAggregator)
                 .build();
 
         return AiServices.builder(CruiseAssistant.class)
@@ -208,6 +200,17 @@ public class ChromaDataStore implements AgentDataStore {
                 .retrievalAugmentor(retrievalAugmentor)
                 .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
                 .build();
+    }
+
+    private static Collection<List<Content>> findingsToContent(List<EmbeddingMatch<TextSegment>> relevant) {
+        Collection<List<Content>> result = new ArrayList<>();
+        List<Content> ourContent = new ArrayList<>();
+        for (EmbeddingMatch<TextSegment> embeddingMatch : relevant) {
+            Content content = new Content(embeddingMatch.embedded());
+            ourContent.add(content);
+        }
+        result.add(ourContent);
+        return result;
     }
 
     private static Path toPath(String relativePath) {
