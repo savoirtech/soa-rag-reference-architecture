@@ -192,12 +192,11 @@ public class ChromaDataStore implements AgentDataStore {
 //                .promptTemplate(promptTemplate)
 //                .build();
 
-
         QueryRouter queryRouter = new DefaultQueryRouter(cruiseInformationRetriever, reservationInformationRetriever);
 
         Map<Query, Collection<List<Content>>> map = new HashMap<>();
-        Query query = new Query("Plans to skydive");
-        Embedding queryEmbedding = embeddingModel.embed("Plans to skydive").content();
+        Query query = new Query("Is Gold loyalty level?");
+        Embedding queryEmbedding = embeddingModel.embed("gold loyalty level").content();
         List<EmbeddingMatch<TextSegment>> relevant = this.chromaEmbeddingStore.findRelevant(queryEmbedding, 10);
         LOGGER.info("Found relevant matches: " + relevant.size());
         Collection<List<Content>> ourContent = findingsToContent(relevant);
