@@ -183,20 +183,20 @@ public class ChromaDataStore implements AgentDataStore {
 
         QueryRouter queryRouter = new DefaultQueryRouter(cruiseInformationRetriever, reservationInformationRetriever);
 
-        Map<Query, Collection<List<Content>>> map = new HashMap<>();
-        Query query = new Query("Has Gold loyalty level?");
-        Embedding queryEmbedding = embeddingModel.embed("gold").content();
-        List<EmbeddingMatch<TextSegment>> relevant = this.chromaEmbeddingStore.findRelevant(queryEmbedding, 10);
-        LOGGER.info("Found relevant matches: " + relevant.size());
-        Collection<List<Content>> ourContent = findingsToContent(relevant);
-        map.put(query, ourContent);
-        ContentAggregator contentAggregator = new DefaultContentAggregator();
-        contentAggregator.aggregate(map);
+//        Map<Query, Collection<List<Content>>> map = new HashMap<>();
+//        Query query = new Query("Has Gold loyalty level?");
+//        Embedding queryEmbedding = embeddingModel.embed("gold").content();
+//        List<EmbeddingMatch<TextSegment>> relevant = this.chromaEmbeddingStore.findRelevant(queryEmbedding, 10);
+//        LOGGER.info("Found relevant matches: " + relevant.size());
+//        Collection<List<Content>> ourContent = findingsToContent(relevant);
+//        map.put(query, ourContent);
+//        ContentAggregator contentAggregator = new DefaultContentAggregator();
+//        contentAggregator.aggregate(map);
 
         RetrievalAugmentor retrievalAugmentor = DefaultRetrievalAugmentor.builder()
                 .queryTransformer(queryTransformer)
                 .queryRouter(queryRouter)
-                .contentAggregator(contentAggregator)
+                //.contentAggregator(contentAggregator)
                 .build();
 
         return AiServices.builder(CruiseAssistant.class)
