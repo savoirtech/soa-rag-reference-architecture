@@ -1,6 +1,7 @@
 # SOA RAG Reference Architecture
 
-In this post we’re going to explore a SOA RAG reference architecture.
+In this post we’re going to explore a Service-Oriented Retrieval
+Augmented Generation reference architecture.
 
 <figure>
 <img src="./assets/images/HighLevelDesign.png" alt="HighLevelDesign" />
