@@ -167,7 +167,7 @@ public class ChromaDataStore implements AgentDataStore {
                 .minScore(0.6)
                 .build();
 
-        Filter cruiseFilter = metadataKey("tenant").isEqualTo("savoir");
+        Filter cruiseFilter = metadataKey("loyaltyLevel").isEqualTo("gold");
 
         ContentRetriever reservationInformationRetriever = EmbeddingStoreContentRetriever.builder()
                 .embeddingStore(embeddingStore2)
