@@ -24,7 +24,7 @@ section {
 }
 
 .headerImage {
-    background-image: url(/src/main/webapp/img/header_ufo.png);
+    background-image: url(/src/main/webapp/img/cruise.png);
     background-repeat: no-repeat;
     background-position: top 20px right 15px;
     height: 103px;
