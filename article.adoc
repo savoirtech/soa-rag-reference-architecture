@@ -267,10 +267,12 @@ We use the following console commands to setup the Agent system:
 feature:repo-add mvn:com.savoir.soa.rag.ref.arch/AppFeature/1.0.0-SNAPSHOT/xml/features
 feature:install agent
 feature:install war
-install -s webbundle:mvn:com.savoir.soa.rag.ref.arch/AppWar/${project.version}/war?Web-ContextPath=chat
+install -s webbundle:mvn:com.savoir.soa.rag.ref.arch/AppWar/1.0.0-SNAPSHOT/war?Web-ContextPath=chat
 ----
 
-Manual Testing Endpoints:
+Before starting a conversation between the system and the AI, we check that LocalAI has llama-3.2-1b-instruct:q4_k_m model installed - if not, we use the provided gallery to obtain the model and install it.
+
+In general we use the provide UI to interact with the system, however you may want to directly communicate to the ai endpoint. To do so you may use a command such as below:
 [,bash,num]
 ----
 curl --location --request POST 'http://127.0.0.1:8181/cxf/ai/ask' \
@@ -278,6 +280,10 @@ curl --location --request POST 'http://127.0.0.1:8181/cxf/ai/ask' \
 ----
 
 == Conclusion
+
+We created this SOA RAG reference architecture to help simplify discussion of how these systems come together to form business relevant AI Agents. Under this architecture many parts of our design implementation may be replaced/substituted with other technologies. Apache Kafka and Apache Flink may replace Apache ActiveMQ and Apache Camel for ETL. Any number of vector databases may replace Chroma. Our choice of LocalAI and llama 3.2 1B model could be replaced by several other AI/Models.
+
+The key takeaways are the data pipeline to pull relevant information into possible consumption by the LLM, and the RAF Query workflow to wire content stores, query transformation, query routing, and retrieval augmentation for our LLM. The deployment foot-print provides a starting point for understanding the various services relate to each other in your datacenter/cloud.
 
 == About the Authors
 
