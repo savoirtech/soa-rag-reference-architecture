@@ -169,10 +169,84 @@ Vector Datastore & the LLM occur.
 We use Apache Karaf with a Backend-For-Frontend design to provide a web
 interface, and integration to LocalAI via LangChain4j.
 
+<figure>
+<img src="./assets/images/RAG-WorkFlow.png" alt="RAG-WorkFlow" />
+</figure>
+
+When a user question is posted to the system we enter the Retrieval
+Augmentation workflow.
+
+``` java
+QueryTransformer queryTransformer = new CompressingQueryTransformer(chatLanguageModel);
+```
+
+The Query is processed by a Query Transformer, in our demo we use
+Compression to allow the LLM to compress a given query and previous
+conversation into a single query. There are other transformer options
+one may use here such as Query Expansion, Query re-writing, Step-back
+prompting, and Hypothetical document embeddings (HyDE).
+
+``` java
+ContentRetriever cruiseInformationRetriever = EmbeddingStoreContentRetriever.builder()
+                .embeddingStore(cruiseInformationStore)
+                .embeddingModel(embeddingModel)
+                .maxResults(2)
+                .minScore(0.6)
+                .build();
+
+        Filter cruiseFilter = metadataKey("loyaltyLevel").isEqualTo("gold");
+
+        ContentRetriever reservationInformationRetriever = EmbeddingStoreContentRetriever.builder()
+                .embeddingStore(reservationInformationStore)
+                .embeddingModel(embeddingModel)
+                .filter(cruiseFilter)
+                .displayName("default")
+                .build();
+```
+
+We build Embedding Content Retrievers for our base Cruise Information,
+and our Customer Reservation store. In the case of our reservations, we
+filter by a metadata key for loyalty level equal to gold. This greatly
+reduces the amount of data the LLM may need to consider.
+
+``` java
+QueryRouter queryRouter = new DefaultQueryRouter(cruiseInformationRetriever, reservationInformationRetriever);
+```
+
+We plug our Information Retrievers into a Query Router. The router will
+determine which sets of content should be considered by our LLM.
+
+``` java
+RetrievalAugmentor retrievalAugmentor = DefaultRetrievalAugmentor.builder()
+                .queryTransformer(queryTransformer)
+                .queryRouter(queryRouter)
+                .build();
+```
+
+Now we plug all of the above into our Retrieval Augmentor.
+
+``` java
+return AiServices.builder(CruiseAssistant.class)
+            .chatLanguageModel(chatLanguageModel)
+            .retrievalAugmentor(retrievalAugmentor)
+            .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
+            .build();
+```
+
+Finally, we connect our Retrieval Augmentor and Chat Language Model to
+become avaialble to process requests.
+
 # The Result
 
 Once this pipeline is created, an agent may use the pre-populated
-embedded store for the LLM.
+embedding stores for the LLM.
+
+<figure>
+<img src="./assets/images/AgentUI.png" alt="AgentUI" />
+</figure>
+
+In the screen capture above, we can see our simple Agent UI chat
+functionality. Users post questions to the Agent, and the Agent replies.
 
 # Demo
 
@@ -191,7 +265,9 @@ information with respect to an upcoming cruise.
 
 Our Cruise Agent AI will allow the Cruise operator to get a 'feel' for
 their operational needs beyond the base logistics of providing food,
-entertainment, and accommodations.
+entertainment, and accommodations. The user may prime the AI Assistant
+with a prompt; we could do this in code however for flexibility of the
+demo we pass this along to the user.
 
 Build our demo project:
 

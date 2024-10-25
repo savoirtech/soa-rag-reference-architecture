@@ -128,9 +128,9 @@ public class ChromaDataStore implements AgentDataStore {
 
         EmbeddingModel embeddingModel = (EmbeddingModel) new OSGiSafeBgeSmallEnV15QuantizedEmbeddingModel();
 
-        EmbeddingStore<TextSegment> embeddingStore1 = new InMemoryEmbeddingStore<>();
+        EmbeddingStore<TextSegment> cruiseInformationStore = new InMemoryEmbeddingStore<>();
 
-        EmbeddingStore<TextSegment> embeddingStore2 = ChromaEmbeddingStore
+        EmbeddingStore<TextSegment> reservationInformationStore = ChromaEmbeddingStore
                 .builder()
                 .baseUrl("http://localhost:8000")
                 .collectionName("soa-rag-ref-arch")
@@ -141,7 +141,7 @@ public class ChromaDataStore implements AgentDataStore {
         EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
                 .documentSplitter(DocumentSplitters.recursive(300, 0))
                 .embeddingModel(embeddingModel)
-                .embeddingStore(embeddingStore1)
+                .embeddingStore(cruiseInformationStore)
                 .build();
 
         ingestor.ingest(document);
@@ -161,7 +161,7 @@ public class ChromaDataStore implements AgentDataStore {
         QueryTransformer queryTransformer = new CompressingQueryTransformer(chatLanguageModel);
 
         ContentRetriever cruiseInformationRetriever = EmbeddingStoreContentRetriever.builder()
-                .embeddingStore(embeddingStore1)
+                .embeddingStore(cruiseInformationStore)
                 .embeddingModel(embeddingModel)
                 .maxResults(2)
                 .minScore(0.6)
@@ -170,14 +170,13 @@ public class ChromaDataStore implements AgentDataStore {
         Filter cruiseFilter = metadataKey("loyaltyLevel").isEqualTo("gold");
 
         ContentRetriever reservationInformationRetriever = EmbeddingStoreContentRetriever.builder()
-                .embeddingStore(embeddingStore2)
+                .embeddingStore(reservationInformationStore)
                 .embeddingModel(embeddingModel)
                 .filter(cruiseFilter)
                 .displayName("default")
                 .build();
 
         QueryRouter queryRouter = new DefaultQueryRouter(cruiseInformationRetriever, reservationInformationRetriever);
-
 
         RetrievalAugmentor retrievalAugmentor = DefaultRetrievalAugmentor.builder()
                 .queryTransformer(queryTransformer)
@@ -189,17 +188,6 @@ public class ChromaDataStore implements AgentDataStore {
                 .retrievalAugmentor(retrievalAugmentor)
                 .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
                 .build();
-    }
-
-    private static Collection<List<Content>> findingsToContent(List<EmbeddingMatch<TextSegment>> relevant) {
-        Collection<List<Content>> result = new ArrayList<>();
-        List<Content> ourContent = new ArrayList<>();
-        for (EmbeddingMatch<TextSegment> embeddingMatch : relevant) {
-            Content content = new Content(embeddingMatch.embedded());
-            ourContent.add(content);
-        }
-        result.add(ourContent);
-        return result;
     }
 
     private static Path toPath(String relativePath) {
