@@ -361,7 +361,7 @@ the Blog, or through the Savoir Technologies website at
 
 # With Thanks
 
-Thank you to the JavaFaker, Apache ActiveMQ, Apache Camel, Apache Karaf,
+Thank you to the DataFaker, Apache ActiveMQ, Apache Camel, Apache Karaf,
 Apache CXF, LangChain4j, and LocalAI communities.
 
 \(c\) 2024 Savoir Technologies
